@@ -1,7 +1,6 @@
-﻿# minecraft-measurement-mod
-The Minecraft Measurement Mod allows the terrain to be measured from the player's perspective. Various measuring devices, such as LiDAR sensors, can be simulated. The measurement data can be saved externally.
+﻿![Logo](./src/main/resources/mmm_logo.png)
 
-![Logo](./src/main/resources/mmm_logo.png)
+The Minecraft Measurement Mod allows the terrain to be measured from the player's perspective. Various measuring devices, such as LiDAR sensors, can be simulated. The measurement data can be saved externally.
 
 ## Setup
 The recommended Minecraft version is `1.20.*`.
