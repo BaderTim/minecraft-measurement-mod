@@ -1,4 +1,4 @@
-﻿# minecraft-measurement-mod
+﻿# minecraft-measurement-mod [![Build on GitHub](https://github.com/BaderTim/minecraft-measurement-mod/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/BaderTim/minecraft-measurement-mod/actions/workflows/gradle.yml)
 ![Logo](./src/main/resources/mmm_logo.png)
 
 The Minecraft Measurement Mod allows the terrain to be measured from the player's perspective. Various measuring devices, such as LiDAR sensors, can be simulated. The measurement data can be saved externally.
