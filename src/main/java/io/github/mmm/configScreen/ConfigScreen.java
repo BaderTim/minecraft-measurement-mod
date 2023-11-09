@@ -8,6 +8,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import static io.github.mmm.MMM.LOGGER;
+import static net.minecraft.util.CommonColors.GRAY;
+import static net.minecraft.util.CommonColors.WHITE;
 
 public class ConfigScreen extends Screen {
 
@@ -16,8 +18,8 @@ public class ConfigScreen extends Screen {
     private static final Component DESCRIPTION = Component.translatable("gui." + MMM.MODID + ".settings.text.description");
 
     // save
-    private static final Component SAVE = Component.translatable("gui." + MMM.MODID + ".settings.save.name");
-    private static final Component SAVE_TOOLTIP = Component.translatable("gui." + MMM.MODID + ".settings.save.tooltip");
+    private static final Component SAVE = Component.translatable("gui." + MMM.MODID + ".settings.exit.name");
+    private static final Component SAVE_TOOLTIP = Component.translatable("gui." + MMM.MODID + ".settings.exit.tooltip");
 
     // switch button
     private static final Component SWITCH_ACTIVE = Component.translatable("gui." + MMM.MODID + ".settings.switch.active");
@@ -91,13 +93,8 @@ public class ConfigScreen extends Screen {
 
         super.render(graphics, mouseX, mouseY, partialTick);
 
-        int WHITE = 0xFFFFFF;
-        int GRAY = 0xAAAAAA;
-        int RED = 0xFF0000;
-        int GREEN = 0x00FF00;
-
         // title
-        graphics.drawCenteredString(this.font, TITLE, this.width/2, 20, 0xFFFFFF);
+        graphics.drawCenteredString(this.font, TITLE, this.width/2, 20, WHITE);
         graphics.drawCenteredString(this.font, DESCRIPTION, this.width/2, 35, WHITE);
 
         // lidar
