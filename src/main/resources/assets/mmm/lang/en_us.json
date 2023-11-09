@@ -6,8 +6,8 @@
   "gui.mmm.settings.title": "Minecraft Measurement Mod Settings",
   "gui.mmm.settings.text.description": "Choose your measurement devices and modify their attributes.",
 
-  "gui.mmm.settings.save.name": "Save & Exit",
-  "gui.mmm.settings.save.tooltip": "Save the current measurment settings and exit the menu.",
+  "gui.mmm.settings.exit.name": "Save & Exit",
+  "gui.mmm.settings.exit.tooltip": "Save the current measurment settings and exit the menu.",
 
   "gui.mmm.settings.switch.active": "active",
   "gui.mmm.settings.switch.inactive": "inactive",
