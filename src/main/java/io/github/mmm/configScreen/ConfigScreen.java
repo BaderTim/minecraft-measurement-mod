@@ -50,36 +50,37 @@ public class ConfigScreen extends Screen {
     protected void init() {
         super.init();
 
+        // exit
         addRenderableWidget(
-                Button.builder(SAVE, this::handleExampleButtonPress)
+                Button.builder(SAVE, this::handleExitButtonPress)
                         .bounds(this.width-100-10, 10, 100, 20)
                         .tooltip(Tooltip.create(SAVE_TOOLTIP))
                         .build()
         );
         // lidar1
         addRenderableWidget(
-                Button.builder(SWITCH_ACTIVE, this::handleExampleButtonPress)
+                Button.builder(SWITCH_ACTIVE, this::handleLidar1SwitchButtonPress)
                         .bounds(50, 75, 50, 20)
                         .tooltip(Tooltip.create(SWITCH_TOOLTIP_DEACTIVATE))
                         .build()
         );
         // lidar2
         addRenderableWidget(
-                Button.builder(SWITCH_INACTIVE, this::handleExampleButtonPress)
+                Button.builder(SWITCH_INACTIVE, this::handleLidar2SwitchButtonPress)
                         .bounds(50, 105, 50, 20)
                         .tooltip(Tooltip.create(SWITCH_TOOLTIP_ACTIVATE))
                         .build()
         );
         // lidar3
         addRenderableWidget(
-                Button.builder(SWITCH_INACTIVE, this::handleExampleButtonPress)
+                Button.builder(SWITCH_INACTIVE, this::handleLidar3SwitchButtonPress)
                         .bounds(50, 135, 50, 20)
                         .tooltip(Tooltip.create(SWITCH_TOOLTIP_ACTIVATE))
                         .build()
         );
         // imu
         addRenderableWidget(
-                Button.builder(SWITCH_ACTIVE, this::handleExampleButtonPress)
+                Button.builder(SWITCH_ACTIVE, this::handleImu1SwitchButtonPress)
                         .bounds(50, 180, 50, 20)
                         .tooltip(Tooltip.create(SWITCH_TOOLTIP_DEACTIVATE))
                         .build()
@@ -125,8 +126,25 @@ public class ConfigScreen extends Screen {
         super.onClose();
     }
 
-    private void handleExampleButtonPress(Button button) {
-        LOGGER.info("Button pressed again!");
+    private void handleExitButtonPress(Button button) {
+        LOGGER.info("Exit button pressed!");
+        this.onClose();
+    }
+
+    private void handleLidar1SwitchButtonPress(Button button) {
+        LOGGER.info("Lidar1 switch button pressed!");
+    }
+
+    private void handleLidar2SwitchButtonPress(Button button) {
+        LOGGER.info("Lidar2 switch button pressed!");
+    }
+
+    private void handleLidar3SwitchButtonPress(Button button) {
+        LOGGER.info("Lidar3 switch button pressed!");
+    }
+
+    private void handleImu1SwitchButtonPress(Button button) {
+        LOGGER.info("Imu1 switch button pressed!");
     }
 
 }
