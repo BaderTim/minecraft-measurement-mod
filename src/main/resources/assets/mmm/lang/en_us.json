@@ -1,0 +1,27 @@
+{
+  "gui.mmm.controls.category.measurement": "Measurement",
+  "gui.mmm.controls.measure": "Start/Stop Measuring",
+  "gui.mmm.controls.settings": "Open Measurement Settings",
+
+  "gui.mmm.settings.title": "Minecraft Measurement Mod Settings",
+  "gui.mmm.settings.text.description": "Choose your measurement devices and modify their attributes.",
+
+  "gui.mmm.settings.save.name": "Save & Exit",
+  "gui.mmm.settings.save.tooltip": "Save the current measurment settings and exit the menu.",
+
+  "gui.mmm.settings.switch.active": "active",
+  "gui.mmm.settings.switch.inactive": "inactive",
+  "gui.mmm.settings.switch.tooltip.activate": "Activate the sensor (currently inactive).",
+  "gui.mmm.settings.switch.tooltip.deactivate": "Deactivate the sensor (currently active).",
+
+  "gui.mmm.settings.lidar": "Lidar Sensors (2D/3D)",
+  "gui.mmm.settings.lidar1.name": "lidar1",
+  "gui.mmm.settings.lidar2.name": "lidar2",
+  "gui.mmm.settings.lidar3.name": "lidar3",
+
+  "gui.mmm.settings.imu": "Inertial Measurement Unit",
+  "gui.mmm.settings.imu1.name": "imu1",
+
+  "gui.mmm.settings.controls": "To change the key bindings, please head to the Controls menu.",
+  "gui.mmm.settings.savepath": "Recorded data will be saved to .minecraft/mmm_data/<recording>"
+}
