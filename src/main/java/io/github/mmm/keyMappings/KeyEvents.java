@@ -1,6 +1,6 @@
 package io.github.mmm.keyMappings;
 
-import io.github.mmm.configScreen.ConfigScreen;
+import io.github.mmm.modConfig.ConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
