@@ -144,24 +144,28 @@ public class ConfigGUI extends Screen {
         LOGGER.info("Lidar1 switch button pressed!");
         Config.LIDAR1_SWITCH.set(!Config.LIDAR1_SWITCH.get());
         Lidar1SwitchButton.setMessage(getSwitchState(Config.LIDAR1_SWITCH.get()));
+        Lidar1SwitchButton.setTooltip(Tooltip.create(getSwitchTooltip(Config.LIDAR1_SWITCH.get())));
     }
 
     private void handleLidar2SwitchButtonPress(Button button) {
         LOGGER.info("Lidar2 switch button pressed!");
         Config.LIDAR2_SWITCH.set(!Config.LIDAR2_SWITCH.get());
         Lidar2SwitchButton.setMessage(getSwitchState(Config.LIDAR2_SWITCH.get()));
+        Lidar2SwitchButton.setTooltip(Tooltip.create(getSwitchTooltip(Config.LIDAR2_SWITCH.get())));
     }
 
     private void handleLidar3SwitchButtonPress(Button button) {
         LOGGER.info("Lidar3 switch button pressed!");
         Config.LIDAR3_SWITCH.set(!Config.LIDAR3_SWITCH.get());
         Lidar3SwitchButton.setMessage(getSwitchState(Config.LIDAR3_SWITCH.get()));
+        Lidar3SwitchButton.setTooltip(Tooltip.create(getSwitchTooltip(Config.LIDAR3_SWITCH.get())));
     }
 
     private void handleImu1SwitchButtonPress(Button button) {
         LOGGER.info("Imu1 switch button pressed!");
         Config.IMU1_SWITCH.set(!Config.IMU1_SWITCH.get());
         IMU1SwitchButton.setMessage(getSwitchState(Config.IMU1_SWITCH.get()));
+        IMU1SwitchButton.setTooltip(Tooltip.create(getSwitchTooltip(Config.IMU1_SWITCH.get())));
     }
 
 }
