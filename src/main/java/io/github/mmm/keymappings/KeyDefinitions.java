@@ -26,9 +26,9 @@ public class KeyDefinitions {
     public static final Lazy<KeyMapping> SETTINGS_MAPPING = Lazy.of(() -> new KeyMapping(
             SETTINGS.getString(),
             KeyConflictContext.UNIVERSAL,
-            KeyModifier.CONTROL,
+            KeyModifier.NONE,
             InputConstants.Type.KEYSYM,
-            InputConstants.KEY_M,
+            InputConstants.KEY_Y,
             CATEGORY.getString()
     ));
 
