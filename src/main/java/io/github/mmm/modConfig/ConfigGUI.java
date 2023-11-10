@@ -11,16 +11,16 @@ import static io.github.mmm.MMM.LOGGER;
 import static net.minecraft.util.CommonColors.GRAY;
 import static net.minecraft.util.CommonColors.WHITE;
 
-public class ConfigScreen extends Screen {
+public class ConfigGUI extends Screen {
 
     // title
     private static final Component TITLE = Component.translatable("gui." + MMM.MODID + ".settings.title");
     private static final Component DESCRIPTION = Component.translatable("gui." + MMM.MODID + ".settings.text.description");
 
     // save
-    private static Button EXIT_BUTTON;
     private static final Component EXIT = Component.translatable("gui." + MMM.MODID + ".settings.exit.name");
-    private static final Component EXIT_TOOLTIP = Component.translatable("gui." + MMM.MODID + ".settings.exit.tooltip");
+    private static Button ExitButton;
+    private static final Component EXIT_BUTTON_TOOLTIP = Component.translatable("gui." + MMM.MODID + ".settings.exit.tooltip");
 
     // switch button
     private static final Component SWITCH_ACTIVE = Component.translatable("gui." + MMM.MODID + ".settings.switch.active");
@@ -30,16 +30,16 @@ public class ConfigScreen extends Screen {
 
     // lidar
     private static final Component LIDAR = Component.translatable("gui." + MMM.MODID + ".settings.lidar");
-    private static Button LIDAR1_SWITCH_BUTTON;
     private static final Component LIDAR1_NAME = Component.translatable("gui." + MMM.MODID + ".settings.lidar1.name");
-    private static Button LIDAR2_SWITCH_BUTTON;
+    private static Button Lidar1SwitchButton;
     private static final Component LIDAR2_NAME = Component.translatable("gui." + MMM.MODID + ".settings.lidar2.name");
-    private static Button LIDAR3_SWITCH_BUTTON;
+    private static Button Lidar2SwitchButton;
     private static final Component LIDAR3_NAME = Component.translatable("gui." + MMM.MODID + ".settings.lidar3.name");
+    private static Button Lidar3SwitchButton;
 
     // imu
     private static final Component IMU = Component.translatable("gui." + MMM.MODID + ".settings.imu");
-    private static Button IMU1_SWITCH_BUTTON;
+    private static Button IMU1SwitchButton;
     private static final Component IMU1NAME = Component.translatable("gui." + MMM.MODID + ".settings.imu1.name");
 
     // bottom hints
@@ -47,7 +47,7 @@ public class ConfigScreen extends Screen {
     private static final Component SAVEPATH = Component.translatable("gui." + MMM.MODID + ".settings.savepath");
 
 
-    public ConfigScreen() {
+    public ConfigGUI() {
         // Use the super class' constructor to set the screen's title
         super(TITLE);
     }
@@ -57,35 +57,35 @@ public class ConfigScreen extends Screen {
         super.init();
 
         // exit
-        EXIT_BUTTON = Button.builder(EXIT, this::handleExitButtonPress)
+        ExitButton = Button.builder(EXIT, this::handleExitButtonPress)
                 .bounds(this.width-100-10, 10, 100, 20)
-                .tooltip(Tooltip.create(EXIT_TOOLTIP))
+                .tooltip(Tooltip.create(EXIT_BUTTON_TOOLTIP))
                 .build();
-        addRenderableWidget(EXIT_BUTTON);
+        addRenderableWidget(ExitButton);
         // lidar1
-        LIDAR1_SWITCH_BUTTON = Button.builder(getSwitchState(Config.LIDAR1_SWITCH.get()), this::handleLidar1SwitchButtonPress)
+        Lidar1SwitchButton = Button.builder(getSwitchState(Config.LIDAR1_SWITCH.get()), this::handleLidar1SwitchButtonPress)
                 .bounds(50, 75, 50, 20)
                 .tooltip(Tooltip.create(getSwitchTooltip(Config.LIDAR1_SWITCH.get())))
                 .build();
-        addRenderableWidget(LIDAR1_SWITCH_BUTTON);
+        addRenderableWidget(Lidar1SwitchButton);
         // lidar2
-        LIDAR2_SWITCH_BUTTON = Button.builder(getSwitchState(Config.LIDAR2_SWITCH.get()), this::handleLidar2SwitchButtonPress)
+        Lidar2SwitchButton = Button.builder(getSwitchState(Config.LIDAR2_SWITCH.get()), this::handleLidar2SwitchButtonPress)
                 .bounds(50, 105, 50, 20)
                 .tooltip(Tooltip.create(getSwitchTooltip(Config.LIDAR2_SWITCH.get())))
                 .build();
-        addRenderableWidget(LIDAR2_SWITCH_BUTTON);
+        addRenderableWidget(Lidar2SwitchButton);
         // lidar3
-        LIDAR3_SWITCH_BUTTON = Button.builder(getSwitchState(Config.LIDAR3_SWITCH.get()), this::handleLidar3SwitchButtonPress)
+        Lidar3SwitchButton = Button.builder(getSwitchState(Config.LIDAR3_SWITCH.get()), this::handleLidar3SwitchButtonPress)
                 .bounds(50, 135, 50, 20)
                 .tooltip(Tooltip.create(getSwitchTooltip(Config.LIDAR3_SWITCH.get())))
                 .build();
-        addRenderableWidget(LIDAR3_SWITCH_BUTTON);
+        addRenderableWidget(Lidar3SwitchButton);
         // imu
-        IMU1_SWITCH_BUTTON = Button.builder(getSwitchState(Config.IMU1_SWITCH.get()), this::handleImu1SwitchButtonPress)
+        IMU1SwitchButton = Button.builder(getSwitchState(Config.IMU1_SWITCH.get()), this::handleImu1SwitchButtonPress)
                 .bounds(50, 180, 50, 20)
                 .tooltip(Tooltip.create(getSwitchTooltip(Config.IMU1_SWITCH.get())))
                 .build();
-        addRenderableWidget(IMU1_SWITCH_BUTTON);
+        addRenderableWidget(IMU1SwitchButton);
     }
 
     private Component getSwitchState(boolean state) {
@@ -143,25 +143,25 @@ public class ConfigScreen extends Screen {
     private void handleLidar1SwitchButtonPress(Button button) {
         LOGGER.info("Lidar1 switch button pressed!");
         Config.LIDAR1_SWITCH.set(!Config.LIDAR1_SWITCH.get());
-        LIDAR1_SWITCH_BUTTON.setMessage(getSwitchState(Config.LIDAR1_SWITCH.get()));
+        Lidar1SwitchButton.setMessage(getSwitchState(Config.LIDAR1_SWITCH.get()));
     }
 
     private void handleLidar2SwitchButtonPress(Button button) {
         LOGGER.info("Lidar2 switch button pressed!");
         Config.LIDAR2_SWITCH.set(!Config.LIDAR2_SWITCH.get());
-        LIDAR2_SWITCH_BUTTON.setMessage(getSwitchState(Config.LIDAR2_SWITCH.get()));
+        Lidar2SwitchButton.setMessage(getSwitchState(Config.LIDAR2_SWITCH.get()));
     }
 
     private void handleLidar3SwitchButtonPress(Button button) {
         LOGGER.info("Lidar3 switch button pressed!");
         Config.LIDAR3_SWITCH.set(!Config.LIDAR3_SWITCH.get());
-        LIDAR3_SWITCH_BUTTON.setMessage(getSwitchState(Config.LIDAR3_SWITCH.get()));
+        Lidar3SwitchButton.setMessage(getSwitchState(Config.LIDAR3_SWITCH.get()));
     }
 
     private void handleImu1SwitchButtonPress(Button button) {
         LOGGER.info("Imu1 switch button pressed!");
         Config.IMU1_SWITCH.set(!Config.IMU1_SWITCH.get());
-        IMU1_SWITCH_BUTTON.setMessage(getSwitchState(Config.IMU1_SWITCH.get()));
+        IMU1SwitchButton.setMessage(getSwitchState(Config.IMU1_SWITCH.get()));
     }
 
 }

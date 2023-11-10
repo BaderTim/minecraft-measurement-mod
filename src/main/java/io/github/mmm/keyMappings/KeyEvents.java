@@ -1,6 +1,6 @@
 package io.github.mmm.keyMappings;
 
-import io.github.mmm.modConfig.ConfigScreen;
+import io.github.mmm.modConfig.ConfigGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -24,7 +24,7 @@ public class KeyEvents {
                 LOGGER.info("MEASURE_START_STOP_MAPPING is pressed");
             } else if (SETTINGS_MAPPING.get().consumeClick()) {
                 LOGGER.info("SETTINGS_MAPPING is pressed");
-                Minecraft.getInstance().setScreen(new ConfigScreen());
+                Minecraft.getInstance().setScreen(new ConfigGUI());
             }
         }
     }
