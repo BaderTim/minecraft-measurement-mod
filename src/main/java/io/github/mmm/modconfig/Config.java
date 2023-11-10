@@ -1,4 +1,4 @@
-package io.github.mmm.modConfig;
+package io.github.mmm.modconfig;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

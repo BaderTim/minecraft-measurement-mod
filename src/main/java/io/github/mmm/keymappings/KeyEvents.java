@@ -1,6 +1,6 @@
-package io.github.mmm.keyMappings;
+package io.github.mmm.keymappings;
 
-import io.github.mmm.modConfig.ConfigGUI;
+import io.github.mmm.modconfig.ConfigGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -9,8 +9,8 @@ import net.minecraftforge.fml.common.Mod;
 
 import static io.github.mmm.MMM.LOGGER;
 import static io.github.mmm.MMM.MODID;
-import static io.github.mmm.keyMappings.KeyDefinitions.MEASURE_MAPPING;
-import static io.github.mmm.keyMappings.KeyDefinitions.SETTINGS_MAPPING;
+import static io.github.mmm.keymappings.KeyDefinitions.MEASURE_MAPPING;
+import static io.github.mmm.keymappings.KeyDefinitions.SETTINGS_MAPPING;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class KeyEvents {

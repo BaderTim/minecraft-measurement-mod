@@ -1,7 +1,7 @@
 package io.github.mmm;
 
 import com.mojang.logging.LogUtils;
-import io.github.mmm.modConfig.Config;
+import io.github.mmm.modconfig.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;

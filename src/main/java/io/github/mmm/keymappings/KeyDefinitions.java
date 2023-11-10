@@ -1,4 +1,4 @@
-package io.github.mmm.keyMappings;
+package io.github.mmm.keymappings;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import io.github.mmm.MMM;
