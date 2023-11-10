@@ -5,10 +5,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static io.github.mmm.MMM.LOGGER;
-import static io.github.mmm.MMM.MODID;
+import static io.github.mmm.MMM.*;
 import static io.github.mmm.keymappings.KeyDefinitions.MEASURE_MAPPING;
-import static io.github.mmm.measurement.Measure.*;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class StartStopMeasureEvent {
@@ -20,10 +18,10 @@ public class StartStopMeasureEvent {
         if (event.phase == TickEvent.Phase.END) {
             if (MEASURE_MAPPING.get().consumeClick()) {
                 LOGGER.info("MEASURE_START_STOP_MAPPING is pressed");
-                if(currentlyMeasuring) {
-                    stopMeasure();
+                if(MEASUREMENT_MANAGER.isCurrentlyMeasuring()) {
+                    MEASUREMENT_MANAGER.stopMeasure();
                 } else {
-                    startMeasure();
+                    MEASUREMENT_MANAGER.startMeasure();
                 }
             }
         }
