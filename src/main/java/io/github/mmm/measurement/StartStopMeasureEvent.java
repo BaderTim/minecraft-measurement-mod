@@ -1,7 +1,5 @@
 package io.github.mmm.measurement;
 
-import io.github.mmm.modconfig.ConfigGUI;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
