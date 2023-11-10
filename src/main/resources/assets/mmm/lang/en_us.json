@@ -1,4 +1,7 @@
 {
+  "chat.mmm.measure.start": "[MMM] Started measuring.",
+  "chat.mmm.measure.stop": "[MMM] Stopped measuring.",
+
   "gui.mmm.controls.category.measurement": "Measurement",
   "gui.mmm.controls.measure": "Start/Stop Measuring",
   "gui.mmm.controls.settings": "Open Measurement Settings",
