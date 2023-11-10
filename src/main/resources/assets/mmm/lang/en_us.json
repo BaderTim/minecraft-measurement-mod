@@ -12,8 +12,8 @@
   "gui.mmm.settings.exit.name": "Save & Exit",
   "gui.mmm.settings.exit.tooltip": "Save the current measurment settings and exit the menu.",
 
-  "gui.mmm.settings.switch.active": "active",
-  "gui.mmm.settings.switch.inactive": "inactive",
+  "gui.mmm.settings.switch.active": "§aactive",
+  "gui.mmm.settings.switch.inactive": "§cinactive",
   "gui.mmm.settings.switch.tooltip.activate": "Activate the sensor (currently inactive).",
   "gui.mmm.settings.switch.tooltip.deactivate": "Deactivate the sensor (currently active).",
 
