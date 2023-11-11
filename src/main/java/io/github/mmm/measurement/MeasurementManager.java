@@ -69,17 +69,17 @@ public class MeasurementManager {
         return startPos.distanceTo(targetPosition);
     }
 
-    private double getDistanceToBlock(float leftRightRotationDeg, float upDownRotationDeg, Player player, float maximumMeasurementDistance) {
+    private double getDistanceFromPOVToBlock(float leftRightPOVRotInDeg, float upDownPOVRotInDeg, Player player, float maximumMeasurementDistance) {
         ClientLevel level = Minecraft.getInstance().level;
         assert level != null;
-        float leftRightRotationRad = (float)Math.toRadians(leftRightRotationDeg);
-        float upDownRotationRad = (float)Math.toRadians(upDownRotationDeg);
+        float leftRightPOVRotInRad = (float)Math.toRadians(leftRightPOVRotInDeg);
+        float upDownPOVRotInRad = (float)Math.toRadians(upDownPOVRotInDeg);
         Vec3 eyePosition = player.getEyePosition();
         Vec3 directionFromEyeView = player.getViewVector(1.0F);
         // get the center of the player's head (0.2 thick) --> move position 'back' by 0.1
         Vec3 startPosition = eyePosition.add(directionFromEyeView.yRot((float)Math.PI).scale(0.1));
         // get the target direction by adding the given rotations to the direction from the eye view
-        Vec3 targetDirection = directionFromEyeView.yRot(leftRightRotationRad).xRot(upDownRotationRad);
+        Vec3 targetDirection = directionFromEyeView.yRot(leftRightPOVRotInRad).xRot(upDownPOVRotInRad);
         Vec3 endPosition = startPosition.add(targetDirection.scale(maximumMeasurementDistance));
         ClipContext context = new ClipContext(
                 startPosition,
