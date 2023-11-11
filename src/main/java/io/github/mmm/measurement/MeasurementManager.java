@@ -42,10 +42,10 @@ public class MeasurementManager {
         double distanceFromEyeView = this.getDistanceToBlock(eyePosition, eyePosition.add(lookVectorFromEyeView.scale(maximumMeasurementDistance)), player);
         System.out.println("Eye View Distance: " + distanceFromEyeView);
 
-        double eyeViewDistaceFromMethod = this.getDistanceToBlock(0, 0, player, maximumMeasurementDistance);
+        double eyeViewDistaceFromMethod = this.getDistanceFromPOVToBlock(0, 0, player, maximumMeasurementDistance);
         System.out.println("Eye View Distance from Method: " + eyeViewDistaceFromMethod);
 
-        double inverseEyeViewDistance = this.getDistanceToBlock(180, 0, player, maximumMeasurementDistance);
+        double inverseEyeViewDistance = this.getDistanceFromPOVToBlock(180, 0, player, maximumMeasurementDistance);
         System.out.println("Inverse Eye View Distance: " + inverseEyeViewDistance);
     }
 
