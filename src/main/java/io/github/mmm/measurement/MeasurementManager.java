@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.Vec3;
 
@@ -28,15 +29,24 @@ public class MeasurementManager {
         ClientLevel level = Minecraft.getInstance().level;
         assert player != null;
         assert level != null;
-
         player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
-        float horizontalRotation = player.getXRot(); // x is around the horizontal axis
-        float verticalRotation = player.getYRot(); // y is around the vertical axis
-        Vec3 eyePosition = player.getEyePosition();
-        Vec3 lookVector = player.getViewVector(1.0F);
 
-        double distance = this.getDistanceToBlock(eyePosition, eyePosition.add(lookVector.scale(maximumMeasurementDistance)));
-        System.out.println("Distance: " + distance);
+
+        Vec3 eyePosition = player.getEyePosition();
+        Vec3 playerPosition = player.position();
+        Vec3 lookVectorFromEyeView = player.getViewVector(1.0F);
+
+        System.out.println("Eye Position: " + eyePosition);
+        System.out.println("Player Position: " + playerPosition);
+
+        double distanceFromEyeView = this.getDistanceToBlock(eyePosition, eyePosition.add(lookVectorFromEyeView.scale(maximumMeasurementDistance)), player);
+        System.out.println("Eye View Distance: " + distanceFromEyeView);
+
+        double eyeViewDistaceFromMethod = this.getDistanceToBlock(0, 0, player, maximumMeasurementDistance);
+        System.out.println("Eye View Distance from Method: " + eyeViewDistaceFromMethod);
+
+        double inverseEyeViewDistance = this.getDistanceToBlock(180, 0, player, maximumMeasurementDistance);
+        System.out.println("Inverse Eye View Distance: " + inverseEyeViewDistance);
     }
 
     public void stopMeasure() {
@@ -45,10 +55,8 @@ public class MeasurementManager {
     }
 
 
-    private double getDistanceToBlock(Vec3 startPos, Vec3 endPos) {
-        LocalPlayer player = Minecraft.getInstance().player;
+    private double getDistanceToBlock(Vec3 startPos, Vec3 endPos, Player player) {
         ClientLevel level = Minecraft.getInstance().level;
-        assert player != null;
         assert level != null;
         ClipContext context = new ClipContext(
                 startPos,
@@ -59,6 +67,29 @@ public class MeasurementManager {
         );
         Vec3 targetPosition = Minecraft.getInstance().level.clip(context).getLocation();
         return startPos.distanceTo(targetPosition);
+    }
+
+    private double getDistanceToBlock(float leftRightRotationDeg, float upDownRotationDeg, Player player, float maximumMeasurementDistance) {
+        ClientLevel level = Minecraft.getInstance().level;
+        assert level != null;
+        float leftRightRotationRad = (float)Math.toRadians(leftRightRotationDeg);
+        float upDownRotationRad = (float)Math.toRadians(upDownRotationDeg);
+        Vec3 eyePosition = player.getEyePosition();
+        Vec3 directionFromEyeView = player.getViewVector(1.0F);
+        // get the center of the player's head (0.2 thick) --> move position 'back' by 0.1
+        Vec3 startPosition = eyePosition.add(directionFromEyeView.yRot((float)Math.PI).scale(0.1));
+        // get the target direction by adding the given rotations to the direction from the eye view
+        Vec3 targetDirection = directionFromEyeView.yRot(leftRightRotationRad).xRot(upDownRotationRad);
+        Vec3 endPosition = startPosition.add(targetDirection.scale(maximumMeasurementDistance));
+        ClipContext context = new ClipContext(
+                startPosition,
+                endPosition,
+                ClipContext.Block.OUTLINE, // check block outlines
+                ClipContext.Fluid.NONE, // ignore fluids
+                player
+        );
+        Vec3 targetPosition = Minecraft.getInstance().level.clip(context).getLocation();
+        return startPosition.distanceTo(targetPosition);
     }
 
 }
