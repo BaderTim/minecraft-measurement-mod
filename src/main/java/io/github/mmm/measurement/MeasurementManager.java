@@ -1,6 +1,8 @@
 package io.github.mmm.measurement;
 
 import io.github.mmm.MMM;
+import io.github.mmm.measurement.utils.Scan2D;
+import io.github.mmm.measurement.utils.Scan3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -34,19 +36,15 @@ public class MeasurementManager {
 
         Vec3 eyePosition = player.getEyePosition();
         Vec3 playerPosition = player.position();
-        Vec3 lookVectorFromEyeView = player.getViewVector(1.0F);
 
         System.out.println("Eye Position: " + eyePosition);
         System.out.println("Player Position: " + playerPosition);
 
-        double distanceFromEyeView = this.getDistanceToBlock(eyePosition, eyePosition.add(lookVectorFromEyeView.scale(maximumMeasurementDistance)), player);
-        System.out.println("Eye View Distance: " + distanceFromEyeView);
+        Scan2D scan2D = get2DScanFromPOVToBlocks(180, 100, 0, 0, 0, player, maximumMeasurementDistance);
+        System.out.println("Scan2D: " + scan2D);
 
-        double eyeViewDistaceFromMethod = this.getDistanceFromPOVToBlock(0, 0, player, maximumMeasurementDistance);
-        System.out.println("Eye View Distance from Method: " + eyeViewDistaceFromMethod);
-
-        double inverseEyeViewDistance = this.getDistanceFromPOVToBlock(180, 0, player, maximumMeasurementDistance);
-        System.out.println("Inverse Eye View Distance: " + inverseEyeViewDistance);
+        Scan3D scan3D = get3DScanFromPOVToBlocks(180, 100, 60, 60, 0, 0, 0, player, maximumMeasurementDistance);
+        System.out.println("Scan3D: " + scan3D);
     }
 
     public void stopMeasure() {
@@ -69,17 +67,18 @@ public class MeasurementManager {
         return startPos.distanceTo(targetPosition);
     }
 
-    private double getDistanceFromPOVToBlock(float yawFromPOVInDeg, float pitchFromPOVInDeg, Player player, float maximumMeasurementDistance) {
+    private double getDistanceFromPOVToBlock(float yawFromPOVInDeg, float pitchFromPOVInDeg, float rollFromPOVInDeg, Player player, float maximumMeasurementDistance) {
         ClientLevel level = Minecraft.getInstance().level;
         assert level != null;
         float yawFromPOVInRad = (float)Math.toRadians(yawFromPOVInDeg);
         float pitchFromPOVInRad = (float)Math.toRadians(pitchFromPOVInDeg);
+        float rollFromPOVInRad = (float)Math.toRadians(rollFromPOVInDeg);
         Vec3 eyePosition = player.getEyePosition();
         Vec3 directionFromEyeView = player.getViewVector(1.0F);
         // get the center of the player's head (0.2 thick) --> move position 'back' by 0.1
         Vec3 startPosition = eyePosition.add(directionFromEyeView.yRot((float)Math.PI).scale(0.1));
         // get the target direction by adding the given rotations to the direction from the eye view
-        Vec3 targetDirection = directionFromEyeView.yRot(yawFromPOVInRad).xRot(pitchFromPOVInRad);
+        Vec3 targetDirection = directionFromEyeView.yRot(yawFromPOVInRad).xRot(pitchFromPOVInRad).zRot(rollFromPOVInRad);
         Vec3 endPosition = startPosition.add(targetDirection.scale(maximumMeasurementDistance));
         ClipContext context = new ClipContext(
                 startPosition,
@@ -90,6 +89,55 @@ public class MeasurementManager {
         );
         Vec3 targetPosition = Minecraft.getInstance().level.clip(context).getLocation();
         return startPosition.distanceTo(targetPosition);
+    }
+
+    private Scan2D get2DScanFromPOVToBlocks(
+            float scanRadiusInDeg,
+            int scansPerRadius,
+            float yawFromPOVInDeg,
+            float pitchFromPOVInDeg,
+            float rollFromPOVInDeg,
+            Player player,
+            float maximumMeasurementDistance
+    ) {
+        float scanAngleDifferenceInDeg = scanRadiusInDeg / scansPerRadius;
+        float yawFromPOVInDegOffset = yawFromPOVInDeg - (scanRadiusInDeg / 2);
+        Scan2D scan = new Scan2D(scansPerRadius);
+        for(int i = 0; i < scansPerRadius; i++) {
+            float yawFromPOVInDeg1D = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;
+            scan.setDistance(i, this.getDistanceFromPOVToBlock(yawFromPOVInDeg1D, pitchFromPOVInDeg, rollFromPOVInDeg, player, maximumMeasurementDistance));
+        }
+        return scan;
+    }
+
+    private Scan3D get3DScanFromPOVToBlocks(
+            float horizontalScanRadiusInDeg,
+            int scansPerHorizontalRadius,
+            float verticalScanRadiusInDeg,
+            int scansPerVerticalRadius,
+            float yawFromPOVInDeg,
+            float pitchFromPOVInDeg,
+            float rollFromPOVInDeg,
+            Player player,
+            float maximumMeasurementDistance
+    ) {
+        float verticalScanAngleDifferenceInDeg = verticalScanRadiusInDeg / scansPerVerticalRadius;
+        float pitchFromPOVInDegOffset = pitchFromPOVInDeg - (verticalScanRadiusInDeg / 2);
+        Scan3D scan3D = new Scan3D(scansPerHorizontalRadius, scansPerVerticalRadius);
+        for(int i = 0; i < scansPerVerticalRadius; i++) {
+            float pitchFromPOVInDeg2D = pitchFromPOVInDegOffset + i * verticalScanAngleDifferenceInDeg;
+            Scan2D scan2D = this.get2DScanFromPOVToBlocks(
+                    horizontalScanRadiusInDeg,
+                    scansPerHorizontalRadius,
+                    yawFromPOVInDeg,
+                    pitchFromPOVInDeg2D,
+                    rollFromPOVInDeg,
+                    player,
+                    maximumMeasurementDistance
+            );
+            scan3D.setScan2D(i, scan2D);
+        }
+        return scan3D;
     }
 
 }
