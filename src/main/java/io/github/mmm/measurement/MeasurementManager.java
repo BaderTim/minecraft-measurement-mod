@@ -33,13 +33,6 @@ public class MeasurementManager {
         assert level != null;
         player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
 
-
-        Vec3 eyePosition = player.getEyePosition();
-        Vec3 playerPosition = player.position();
-
-        System.out.println("Eye Position: " + eyePosition);
-        System.out.println("Player Position: " + playerPosition);
-
         Scan2D scan2D = get2DScanFromPOVToBlocks(180, 100, 0, 0, 0, player, maximumMeasurementDistance);
         System.out.println("Scan2D: " + scan2D);
 
@@ -101,7 +94,7 @@ public class MeasurementManager {
             float maximumMeasurementDistance
     ) {
         float scanAngleDifferenceInDeg = scanRadiusInDeg / scansPerRadius;
-        float yawFromPOVInDegOffset = yawFromPOVInDeg - (scanRadiusInDeg / 2);
+        float yawFromPOVInDegOffset = yawFromPOVInDeg - (scanRadiusInDeg / 2); // start at the left side of the scan
         Scan2D scan = new Scan2D(scansPerRadius);
         for(int i = 0; i < scansPerRadius; i++) {
             float yawFromPOVInDeg1D = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;
@@ -122,10 +115,10 @@ public class MeasurementManager {
             float maximumMeasurementDistance
     ) {
         float verticalScanAngleDifferenceInDeg = verticalScanRadiusInDeg / scansPerVerticalRadius;
-        float pitchFromPOVInDegOffset = pitchFromPOVInDeg - (verticalScanRadiusInDeg / 2);
+        float pitchFromPOVInDegOffset = pitchFromPOVInDeg + (verticalScanRadiusInDeg / 2); // start at the top of the scan
         Scan3D scan3D = new Scan3D(scansPerHorizontalRadius, scansPerVerticalRadius);
         for(int i = 0; i < scansPerVerticalRadius; i++) {
-            float pitchFromPOVInDeg2D = pitchFromPOVInDegOffset + i * verticalScanAngleDifferenceInDeg;
+            float pitchFromPOVInDeg2D = pitchFromPOVInDegOffset - i * verticalScanAngleDifferenceInDeg;
             Scan2D scan2D = this.get2DScanFromPOVToBlocks(
                     horizontalScanRadiusInDeg,
                     scansPerHorizontalRadius,
