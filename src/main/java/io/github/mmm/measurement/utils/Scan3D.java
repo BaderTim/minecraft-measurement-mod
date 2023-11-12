@@ -19,11 +19,16 @@ public class Scan3D {
 
     @Override
     public String toString() {
+        String distancesString = "";
+        for (int i = 0; i < distances.length - 1; i++) {
+            distancesString += java.util.Arrays.toString(distances[i].getDistances()) + ",";
+        }
+        distancesString += java.util.Arrays.toString(distances[distances.length - 1].getDistances());
         return "Scan3D{" +
                 "scansPerHorizontalRadius=" + scansPerHorizontalRadius +
                 ",scansPerVerticalRadius=" + scansPerVerticalRadius +
-                ",distances=" + java.util.Arrays.toString(distances) +
-                '}';
+                ",distances=[" + distancesString +
+                "]}";
     }
 
     public void setScan2D(int scanNumber, Scan2D scan2D) {
