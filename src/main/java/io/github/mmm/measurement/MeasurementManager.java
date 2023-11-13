@@ -11,21 +11,34 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.Vec3;
 
+import java.io.RandomAccessFile;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class MeasurementManager {
 
     private Boolean currentlyMeasuring;
+    private final String filePath = Minecraft.getInstance().gameDirectory.getPath() + "/measurements/";
 
     public MeasurementManager() {
         System.out.println("Measure constructor");
-        currentlyMeasuring = false;
+        this.currentlyMeasuring = false;
+        try {
+            System.out.println("Creating directory: " + this.filePath);
+            Files.createDirectories(Paths.get(this.filePath));
+        } catch (Exception e) {
+            System.out.println("Error creating directory: " + e.getMessage());
+        }
     }
 
     public Boolean isCurrentlyMeasuring() {
-        return currentlyMeasuring;
+        return this.currentlyMeasuring;
     }
 
     public void startMeasure() {
-        currentlyMeasuring = true;
+        this.currentlyMeasuring = true;
         float maximumMeasurementDistance = 10.0f;
         LocalPlayer player = Minecraft.getInstance().player;
         ClientLevel level = Minecraft.getInstance().level;
@@ -33,16 +46,53 @@ public class MeasurementManager {
         assert level != null;
         player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
 
-        Scan2D scan2D = get2DScanFromPOVToBlocks(180, 100, 0, 0, 0, player, maximumMeasurementDistance);
-        System.out.println("Scan2D: " + scan2D);
-
         Scan3D scan3D = get3DScanFromPOVToBlocks(180, 100, 60, 60, 0, 0, 0, player, maximumMeasurementDistance);
-        System.out.println("Scan3D: " + scan3D);
+        this.saveStringToFile("timestamp;scan3d\n", "scan3d.csv");
+        this.saveScanToFile(scan3D, "scan3d.csv");
+
     }
 
     public void stopMeasure() {
         Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.stop"), false);
-        currentlyMeasuring = false;
+        this.currentlyMeasuring = false;
+    }
+
+    private void saveScanToFile(Scan2D scan2D, String fileName) {
+        String distances = scan2D.getDistances().toString();
+        long timestamp = System.currentTimeMillis();
+        String result = timestamp + ";" + distances + "\n";
+        this.saveStringToFile(result, fileName);
+    }
+
+    private void saveScanToFile(Scan3D scan3D, String fileName) {
+        Scan2D[] distances = scan3D.getDistances();
+        String distancesString = "";
+        for (int i = 0; i < distances.length - 1; i++) {
+            distancesString += java.util.Arrays.toString(distances[i].getDistances()) + ",";
+        }
+        distancesString += java.util.Arrays.toString(distances[distances.length - 1].getDistances());
+        long timestamp = System.currentTimeMillis();
+        String result = timestamp + ";[" + distancesString + "]\n";
+        this.saveStringToFile(result, fileName);
+    }
+
+    private void saveStringToFile(String newData, String fileName) {
+
+        final String savePath = this.filePath + fileName;
+
+        try {
+            // Open the file in "rw" mode (read and write)
+            RandomAccessFile file = new RandomAccessFile(savePath, "rw");
+            // Move the file pointer to the end of the file
+            file.seek(file.length());
+            // Write the data to the end of the file
+            file.writeBytes(newData);
+            // Close the file
+            file.close();
+        } catch (Exception e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
+
     }
 
 
@@ -81,7 +131,8 @@ public class MeasurementManager {
                 player
         );
         Vec3 targetPosition = Minecraft.getInstance().level.clip(context).getLocation();
-        return startPosition.distanceTo(targetPosition);
+        BigDecimal bd = new BigDecimal(startPosition.distanceTo(targetPosition));
+        return bd.setScale(3, RoundingMode.HALF_UP).doubleValue();
     }
 
     private Scan2D get2DScanFromPOVToBlocks(
