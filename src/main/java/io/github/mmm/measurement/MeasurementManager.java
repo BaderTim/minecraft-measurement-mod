@@ -18,9 +18,11 @@ import java.time.format.DateTimeFormatter;
 
 public class MeasurementManager {
 
-    private final String filePath = Minecraft.getInstance().gameDirectory.getPath() + "/mmm_data/";
-    private String startTime;
     private Boolean currentlyMeasuring;
+
+    private final String FILE_PATH = Minecraft.getInstance().gameDirectory.getPath() + "/mmm_data/";
+    private String startTime;
+
     private LiDAR lidar1;
     private boolean lidar1Active;
     private LiDAR lidar2;
@@ -34,8 +36,8 @@ public class MeasurementManager {
         System.out.println("Measure constructor");
         this.currentlyMeasuring = false;
         try {
-            System.out.println("Creating directory: " + this.filePath);
-            Files.createDirectories(Paths.get(this.filePath));
+            System.out.println("Creating directory: " + this.FILE_PATH);
+            Files.createDirectories(Paths.get(this.FILE_PATH));
         } catch (Exception e) {
             System.out.println("Error creating directory: " + e.getMessage());
         }
@@ -106,7 +108,7 @@ public class MeasurementManager {
 
         this.startTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
         try {
-            Files.createDirectories(Paths.get(this.filePath+this.startTime));
+            Files.createDirectories(Paths.get(this.FILE_PATH+this.startTime));
         } catch (Exception e) {
             System.out.println("Error creating directory: " + e.getMessage());
         }
@@ -161,7 +163,7 @@ public class MeasurementManager {
 
 
     private void saveStringToFile(String newData, String fileName) {
-        final String savePath = this.filePath + this.startTime + "/" + fileName;
+        final String savePath = this.FILE_PATH + this.startTime + "/" + fileName;
         try {
             // Open the file in "rw" mode (read and write)
             RandomAccessFile file = new RandomAccessFile(savePath, "rw");
