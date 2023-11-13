@@ -1,4 +1,6 @@
 {
+  "chat.mmm.warning.tickrate": "§4[MMM] Game tick took too long! This may cause inaccurate timing of measurements.",
+
   "chat.mmm.measure.start": "§a[MMM] Started measuring.",
   "chat.mmm.measure.stop": "§c[MMM] Stopped measuring.",
 
