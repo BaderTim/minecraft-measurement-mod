@@ -1,6 +1,6 @@
 package io.github.mmm.measurement;
 
-import io.github.mmm.measurement.utils.Scan;
+import io.github.mmm.measurement.objects.Scan;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

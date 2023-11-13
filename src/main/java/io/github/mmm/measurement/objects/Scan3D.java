@@ -1,4 +1,4 @@
-package io.github.mmm.measurement.utils;
+package io.github.mmm.measurement.objects;
 
 public class Scan3D {
 

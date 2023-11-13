@@ -1,9 +1,8 @@
 package io.github.mmm.measurement.devices;
 
-import io.github.mmm.measurement.utils.Scan;
-import io.github.mmm.measurement.utils.Scan2D;
-import io.github.mmm.measurement.utils.Scan3D;
-import net.minecraft.client.Minecraft;
+import io.github.mmm.measurement.objects.Scan;
+import io.github.mmm.measurement.objects.Scan2D;
+import io.github.mmm.measurement.objects.Scan3D;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
