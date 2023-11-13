@@ -1,4 +1,4 @@
-package io.github.mmm.measurement;
+package io.github.mmm.keymappings;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.*;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +15,7 @@ import static io.github.mmm.MMM.*;
 import static io.github.mmm.keymappings.KeyDefinitions.MEASURE_MAPPING;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class StartStopMeasureEvent {
+public class KeyEvents {
 
     static Tesselator tesselator = Tesselator.getInstance();
     static BufferBuilder bufferBuilder = tesselator.getBuilder();
