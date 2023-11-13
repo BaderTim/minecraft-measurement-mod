@@ -4,11 +4,11 @@ public class Scan {
 
     private Scan2D scan2D;
     private Scan3D scan3D;
-    private boolean is2D = false;
+    private boolean is2D;
 
     public Scan(Scan2D scan2D) {
         this.scan2D = scan2D;
-        is2D = true;
+        this.is2D = true;
     }
 
     public Scan(Scan3D scan3D) {

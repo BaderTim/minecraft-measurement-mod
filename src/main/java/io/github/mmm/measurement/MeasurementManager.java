@@ -5,7 +5,6 @@ import io.github.mmm.measurement.devices.IMU;
 import io.github.mmm.measurement.devices.LiDAR;
 import io.github.mmm.measurement.utils.Scan;
 import io.github.mmm.measurement.utils.Scan2D;
-import io.github.mmm.measurement.utils.Scan3D;
 import io.github.mmm.modconfig.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -14,10 +13,13 @@ import net.minecraft.network.chat.Component;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MeasurementManager {
 
-    private final String filePath = Minecraft.getInstance().gameDirectory.getPath() + "/measurements/";
+    private final String filePath = Minecraft.getInstance().gameDirectory.getPath() + "/mmm_data/";
+    private String startTime;
     private Boolean currentlyMeasuring;
     private LiDAR lidar1;
     private boolean lidar1Active;
@@ -49,10 +51,10 @@ public class MeasurementManager {
 
         if (Config.LIDAR1_SWITCH.get()) {
             this.lidar1 = new LiDAR(
-                    60,
-                    120,
-                    180,
                     360,
+                    0,
+                    180,
+                    0,
                     0,
                     0,
                     0,
@@ -102,6 +104,13 @@ public class MeasurementManager {
         if(lidar3 != null) this.saveStringToFile("timestamp;data\n", "lidar3.csv");
         if(imu1 != null) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ;magX;magY;magZ\n", "imu1.csv");
 
+        this.startTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
+        try {
+            Files.createDirectories(Paths.get(this.filePath+this.startTime));
+        } catch (Exception e) {
+            System.out.println("Error creating directory: " + e.getMessage());
+        }
+
         player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
         this.currentlyMeasuring = true;
     }
@@ -125,19 +134,20 @@ public class MeasurementManager {
             this.imu1 = null;
             this.imu1Active = false;
         }
+        this.startTime = null;
     }
 
     public void saveLiDARScanToFile(Scan scan, String fileName) {
         long timestamp = System.currentTimeMillis();
         String distancesString = "";
         if(scan.is2D()) {
-            distancesString = scan.getScan2D().getDistances().toString();
+            distancesString = java.util.Arrays.toString(scan.getScan2D().getDistances());
         } else {
             Scan2D[] distances = scan.getScan3D().getDistances();
             for (int i = 0; i < distances.length - 1; i++) {
                 distancesString += java.util.Arrays.toString(distances[i].getDistances()) + ",";
             }
-            distancesString += java.util.Arrays.toString(distances[distances.length - 1].getDistances());
+            distancesString = "[" + distancesString + java.util.Arrays.toString(distances[distances.length - 1].getDistances()) + "]";
         }
         String result = timestamp + ";" + distancesString + "\n";
         this.saveStringToFile(result, fileName);
@@ -151,7 +161,7 @@ public class MeasurementManager {
 
 
     private void saveStringToFile(String newData, String fileName) {
-        final String savePath = this.filePath + fileName;
+        final String savePath = this.filePath + this.startTime + "/" + fileName;
         try {
             // Open the file in "rw" mode (read and write)
             RandomAccessFile file = new RandomAccessFile(savePath, "rw");
