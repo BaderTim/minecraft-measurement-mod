@@ -192,4 +192,14 @@ public class LiDAR {
         return level;
     }
 
+    public static class SubLiDAR implements Runnable {
+
+        public SubLiDAR() {
+        }
+
+        @Override
+        public void run() {
+
+        }
+    }
 }
