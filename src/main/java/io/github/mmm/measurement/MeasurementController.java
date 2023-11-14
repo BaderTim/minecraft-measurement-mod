@@ -2,7 +2,8 @@ package io.github.mmm.measurement;
 
 import io.github.mmm.MMM;
 import io.github.mmm.measurement.devices.IMU;
-import io.github.mmm.measurement.devices.LiDAR;
+import io.github.mmm.measurement.devices.lidar.LiDAR;
+import io.github.mmm.measurement.devices.lidar.LiDARController;
 import io.github.mmm.measurement.objects.Scan;
 import io.github.mmm.measurement.objects.Scan2D;
 import io.github.mmm.modconfig.Config;
@@ -15,24 +16,22 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
-public class MeasurementManager {
+public class MeasurementController {
 
     private Boolean currentlyMeasuring;
 
     private final String FILE_PATH = Minecraft.getInstance().gameDirectory.getPath() + "/mmm_data/";
     private String startTime;
 
+    private LiDARController lidarController;
     private LiDAR lidar1;
-    private boolean lidar1Active;
     private LiDAR lidar2;
-    private boolean lidar2Active;
     private LiDAR lidar3;
-    private boolean lidar3Active;
     private IMU imu1;
-    private boolean imu1Active;
 
-    public MeasurementManager() {
+    public MeasurementController() {
         System.out.println("Measure constructor");
         this.currentlyMeasuring = false;
         try {
@@ -50,13 +49,12 @@ public class MeasurementManager {
     public void startMeasure() {
         LocalPlayer player = Minecraft.getInstance().player;
         assert player != null;
-
         if (Config.LIDAR1_SWITCH.get()) {
             this.lidar1 = new LiDAR(
-                    360,
-                    0,
                     180,
-                    0,
+                    60,
+                    180,
+                    60,
                     0,
                     0,
                     0,
@@ -64,7 +62,6 @@ public class MeasurementManager {
                     player,
                     Minecraft.getInstance().level
             );
-            this.lidar1Active = true;
         }
         if (Config.LIDAR2_SWITCH.get()) {
             this.lidar2 = new LiDAR(
@@ -79,7 +76,6 @@ public class MeasurementManager {
                     player,
                     Minecraft.getInstance().level
             );
-            this.lidar2Active = true;
         }
         if (Config.LIDAR3_SWITCH.get()) {
             this.lidar3 = new LiDAR(
@@ -94,11 +90,10 @@ public class MeasurementManager {
                     player,
                     Minecraft.getInstance().level
             );
-            this.lidar3Active = true;
         }
+        this.lidarController = new LiDARController(new LiDAR[]{lidar1, lidar2, lidar3});
         if (Config.IMU1_SWITCH.get()) {
             this.imu1 = new IMU();
-            this.imu1Active = true;
         }
 
         if(lidar1 != null) this.saveStringToFile("timestamp;data\n", "lidar1.csv");
@@ -120,22 +115,10 @@ public class MeasurementManager {
     public void stopMeasure() {
         Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.stop"), false);
         this.currentlyMeasuring = false;
-        if(lidar1Active) {
-            this.lidar1 = null;
-            this.lidar1Active = false;
-        }
-        if(lidar2Active) {
-            this.lidar2 = null;
-            this.lidar2Active = false;
-        }
-        if(lidar3Active) {
-            this.lidar3 = null;
-            this.lidar3Active = false;
-        }
-        if(imu1Active) {
-            this.imu1 = null;
-            this.imu1Active = false;
-        }
+        this.lidar1 = null;
+        this.lidar2 = null;
+        this.lidar3 = null;
+        this.imu1 = null;
         this.startTime = null;
     }
 
@@ -178,6 +161,10 @@ public class MeasurementManager {
         }
     }
 
+    public LiDARController getLidarController() {
+        return lidarController;
+    }
+
     public LiDAR getLidar1() {
         return lidar1;
     }
@@ -194,19 +181,4 @@ public class MeasurementManager {
         return imu1;
     }
 
-    public boolean isLidar1Active() {
-        return lidar1Active;
-    }
-
-    public boolean isLidar2Active() {
-        return lidar2Active;
-    }
-
-    public boolean isLidar3Active() {
-        return lidar3Active;
-    }
-
-    public boolean isImu1Active() {
-        return imu1Active;
-    }
 }

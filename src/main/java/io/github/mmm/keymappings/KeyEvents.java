@@ -27,14 +27,14 @@ public class KeyEvents {
         if (event.phase == TickEvent.Phase.END) {
             if (MEASURE_MAPPING.get().consumeClick()) {
                 LOGGER.info("MEASURE_START_STOP_MAPPING is pressed");
-                if(MEASUREMENT_MANAGER.isCurrentlyMeasuring()) {
-                    MEASUREMENT_MANAGER.stopMeasure();
+                if(MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
+                    MEASUREMENT_CONTROLLER.stopMeasure();
                 } else {
-                    MEASUREMENT_MANAGER.startMeasure();
+                    MEASUREMENT_CONTROLLER.startMeasure();
                 }
             }
 
-            if(MEASUREMENT_MANAGER.isCurrentlyMeasuring()) {
+            if(MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
                 // reference: https://github.com/cabaletta/baritone/blob/e183dcba1707c991fea1ba55be052dc3ee5d71a6/src/main/java/baritone/utils/IRenderer.java#L149
 
                 RenderSystem.enableBlend();

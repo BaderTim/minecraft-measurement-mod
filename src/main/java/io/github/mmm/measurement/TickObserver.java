@@ -29,7 +29,7 @@ public class TickObserver {
                 lastTickTime = currentTime;
                 return;
             }
-            if (MEASUREMENT_MANAGER.isCurrentlyMeasuring() && (currentTime - lastTickTime - 1000/TICKS_PER_SECOND - TOLERANCE_IN_MS) > 0) {
+            if (MEASUREMENT_CONTROLLER.isCurrentlyMeasuring() && (currentTime - lastTickTime - 1000/TICKS_PER_SECOND - TOLERANCE_IN_MS) > 0) {
                 if (tickCount > messageTimeoutInTicks) {
                     player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".warning.tickrate"), false);
                     LOGGER.warn("Tick time took too long: " + (currentTime - lastTickTime) + "ms");

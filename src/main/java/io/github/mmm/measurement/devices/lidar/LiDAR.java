@@ -1,4 +1,4 @@
-package io.github.mmm.measurement.devices;
+package io.github.mmm.measurement.devices.lidar;
 
 import io.github.mmm.measurement.objects.Scan;
 import io.github.mmm.measurement.objects.Scan2D;

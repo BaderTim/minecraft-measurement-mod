@@ -1,7 +1,7 @@
 package io.github.mmm;
 
 import com.mojang.logging.LogUtils;
-import io.github.mmm.measurement.MeasurementManager;
+import io.github.mmm.measurement.MeasurementController;
 import io.github.mmm.modconfig.Config;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -18,7 +18,7 @@ public class MMM {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     // Create Measure object
-    public static final MeasurementManager MEASUREMENT_MANAGER = new MeasurementManager();
+    public static final MeasurementController MEASUREMENT_CONTROLLER = new MeasurementController();
 
 
     public MMM() {
