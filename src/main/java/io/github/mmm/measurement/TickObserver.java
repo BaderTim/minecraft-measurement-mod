@@ -9,8 +9,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static io.github.mmm.MMM.MEASUREMENT_MANAGER;
-import static io.github.mmm.MMM.MODID;
+import static io.github.mmm.MMM.*;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class TickObserver {
@@ -33,6 +32,7 @@ public class TickObserver {
             if (MEASUREMENT_MANAGER.isCurrentlyMeasuring() && (currentTime - lastTickTime - 1000/TICKS_PER_SECOND - TOLERANCE_IN_MS) > 0) {
                 if (tickCount > messageTimeoutInTicks) {
                     player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".warning.tickrate"), false);
+                    LOGGER.warn("Tick time took too long: " + (currentTime - lastTickTime) + "ms");
                     tickCount = 0;
                 }
             }
