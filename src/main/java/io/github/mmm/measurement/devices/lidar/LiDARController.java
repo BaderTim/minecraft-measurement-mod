@@ -11,6 +11,7 @@ public class LiDARController {
     private final LiDAR[] lidars;
     private ArrayList<Scan>[] scans;
     private int maxThreadCount;
+    private int passedTicks;
 
     public LiDARController(LiDAR[] lidars) {
         if (Config.MULTITHREAD_SWITCH.get()) {
@@ -31,6 +32,16 @@ public class LiDARController {
     }
 
     public void scan() {
+        this.passedTicks = 0;
+        this.executeScan();
+    }
+
+    public void scan(int passedTicks) {
+        this.passedTicks = passedTicks;
+        this.executeScan();
+    }
+
+    private void executeScan() {
         Scan[] currentScans;
         if(this.maxThreadCount == 1) {
             currentScans = this.getScansSingleThreaded();
@@ -45,7 +56,7 @@ public class LiDARController {
     private Scan[] getScansSingleThreaded() {
         Scan[] scans = new Scan[this.lidars.length];
         for (int i = 0; i < this.lidars.length; i++) {
-            if(this.lidars[i] != null) {
+            if(this.isLidarAllowedToScan(this.lidars[i])) {
                 scans[i] = this.lidars[i].scanFromPOVToBlocks();
             } else {
                 scans[i] = null;
@@ -60,7 +71,7 @@ public class LiDARController {
         // slice main lidars into sublidars
         for(int l = 0; l < this.lidars.length; l++) {
             LiDAR lidar = this.lidars[l];
-            if(lidar == null) continue;
+            if(!this.isLidarAllowedToScan(lidar)) continue;
             ArrayList<LiDAR> newSubLidars;
             if(lidar.getVerticalScanRadiusInDeg() == 0) { // 2D
                 newSubLidars = this.getSubLidarsFrom2DLidar(lidar);
@@ -107,7 +118,7 @@ public class LiDARController {
                 if(subScans[s] == null) break;
                 if(parsedSubLidars == subLidarsPerLidar[currentLidar]) {
                     parsedSubLidars = 0;
-                    if(this.lidars[currentLidar] == null) {
+                    if(!this.isLidarAllowedToScan(this.lidars[currentLidar])) {
                         currentLidar++;
                         break;
                     }
@@ -167,6 +178,10 @@ public class LiDARController {
 
     private Scan build3DScanFromSubScans(Scan[] subScans, LiDAR lidar) {
         return null;
+    }
+
+    private boolean isLidarAllowedToScan(LiDAR lidar) {
+        return lidar != null && this.passedTicks % lidar.getFrequencyInTicks() == 0;
     }
 
 }

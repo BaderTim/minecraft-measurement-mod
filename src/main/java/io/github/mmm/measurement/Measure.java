@@ -19,15 +19,17 @@ public class Measure {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END && MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
-            MEASUREMENT_CONTROLLER.getLidarController().scan();
-            if (passedTicks == MEASUREMENT_CONTROLLER.getSaveInterval()) {
+            MEASUREMENT_CONTROLLER.getLidarController().scan(passedTicks);
+            if (passedTicks % MEASUREMENT_CONTROLLER.getSaveInterval() == 0) {
                 ArrayList<Scan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
                 for (int i = 0; i < scans.length; i++) {
                     MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + i + ".csv");
                 }
                 // TODO: implement IMU
-                passedTicks = 0;
+
+                MEASUREMENT_CONTROLLER.getLidarController().clearScans();
             }
+            if (passedTicks == Integer.MAX_VALUE) passedTicks = 0;
             passedTicks++;
         }
     }

@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import static io.github.mmm.MMM.MEASUREMENT_CONTROLLER;
+
 public class MeasurementController {
 
     private Boolean currentlyMeasuring;
@@ -61,6 +63,7 @@ public class MeasurementController {
                     Config.LIDAR1_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.LIDAR1_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.LIDAR1_MAXIMUM_MEASUREMENT_DISTANCE.get(),
+                    Config.LIDAR1_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
                     Minecraft.getInstance().level
             );
@@ -75,6 +78,7 @@ public class MeasurementController {
                     Config.LIDAR2_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.LIDAR2_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.LIDAR2_MAXIMUM_MEASUREMENT_DISTANCE.get(),
+                    Config.LIDAR2_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
                     Minecraft.getInstance().level
             );
@@ -89,6 +93,7 @@ public class MeasurementController {
                     Config.LIDAR3_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.LIDAR3_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.LIDAR3_MAXIMUM_MEASUREMENT_DISTANCE.get(),
+                    Config.LIDAR3_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
                     Minecraft.getInstance().level
             );
@@ -115,7 +120,15 @@ public class MeasurementController {
     }
 
     public void stopMeasure() {
+        // save remaining scans
+        ArrayList<Scan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
+        for (int i = 0; i < scans.length; i++) {
+            MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + i + ".csv");
+        }
+        MEASUREMENT_CONTROLLER.getLidarController().clearScans();
+        // send stop message
         Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.stop"), false);
+        // reset
         this.currentlyMeasuring = false;
         this.lidar1 = null;
         this.lidar2 = null;

@@ -16,6 +16,7 @@ public class Config  {
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR1_PITCH_OFFSET_FROM_POV_IN_DEG;
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR1_ROLL_OFFSET_FROM_POV_IN_DEG;
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR1_MAXIMUM_MEASUREMENT_DISTANCE;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LIDAR1_MEASUREMENT_FREQUENCY_IN_HZ;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> LIDAR2_SWITCH;
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR2_HORIZONTAL_SCANNING_RADIUS_IN_DEG;
@@ -26,6 +27,7 @@ public class Config  {
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR2_PITCH_OFFSET_FROM_POV_IN_DEG;
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR2_ROLL_OFFSET_FROM_POV_IN_DEG;
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR2_MAXIMUM_MEASUREMENT_DISTANCE;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LIDAR2_MEASUREMENT_FREQUENCY_IN_HZ;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> LIDAR3_SWITCH;
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR3_HORIZONTAL_SCANNING_RADIUS_IN_DEG;
@@ -36,6 +38,7 @@ public class Config  {
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR3_PITCH_OFFSET_FROM_POV_IN_DEG;
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR3_ROLL_OFFSET_FROM_POV_IN_DEG;
     public static final ForgeConfigSpec.ConfigValue<Float> LIDAR3_MAXIMUM_MEASUREMENT_DISTANCE;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LIDAR3_MEASUREMENT_FREQUENCY_IN_HZ;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> IMU1_SWITCH;
 
@@ -65,6 +68,9 @@ public class Config  {
                 .define("lidar1_roll_offset_from_pov_in_deg", (float)0.0);
         LIDAR1_MAXIMUM_MEASUREMENT_DISTANCE = BUILDER.comment("Maximum Measurement Distance in Meters for LIDAR Sensor lidar1")
                 .define("lidar1_maximum_measurement_distance", (float)10.0);
+        LIDAR1_MEASUREMENT_FREQUENCY_IN_HZ = BUILDER.comment("Measurement Frequency in Hz for LIDAR Sensor lidar1 (allowed are: 1, 2, 4, 5, 10, 20)")
+                .define("lidar1_measurement_frequency_in_hz", 10);
+
 
         LIDAR2_SWITCH = BUILDER.comment("Activate/Deactivate LIDAR Sensor lidar2 (active = true, inactive = false)")
                 .define("lidar2_switch", true);
@@ -84,6 +90,8 @@ public class Config  {
                 .define("lidar2_roll_offset_from_pov_in_deg", (float)0.0);
         LIDAR2_MAXIMUM_MEASUREMENT_DISTANCE = BUILDER.comment("Maximum Measurement Distance in Meters for LIDAR Sensor lidar2")
                 .define("lidar2_maximum_measurement_distance", (float)10.0);
+        LIDAR2_MEASUREMENT_FREQUENCY_IN_HZ = BUILDER.comment("Measurement Frequency in Hz for LIDAR Sensor lidar2 (allowed are: 1, 2, 4, 5, 10, 20)")
+                .define("lidar2_measurement_frequency_in_hz", 10);
 
         LIDAR3_SWITCH = BUILDER.comment("Activate/Deactivate LIDAR Sensor lidar3 (active = true, inactive = false)")
                 .define("lidar3_switch", true);
@@ -103,6 +111,8 @@ public class Config  {
                 .define("lidar3_roll_offset_from_pov_in_deg", (float)0.0);
         LIDAR3_MAXIMUM_MEASUREMENT_DISTANCE = BUILDER.comment("Maximum Measurement Distance in Meters for LIDAR Sensor lidar3")
                 .define("lidar3_maximum_measurement_distance", (float)10.0);
+        LIDAR3_MEASUREMENT_FREQUENCY_IN_HZ = BUILDER.comment("Measurement Frequency in Hz for LIDAR Sensor lidar3 (allowed are: 1, 2, 4, 5, 10, 20)")
+                .define("lidar3_measurement_frequency_in_hz", 10);
 
         IMU1_SWITCH = BUILDER.comment("Activate/Deactivate IMU Sensor imu1 (active = true, inactive = false)")
                 .define("imu1_switch", true);

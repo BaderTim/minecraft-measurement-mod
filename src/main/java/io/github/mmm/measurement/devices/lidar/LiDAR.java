@@ -21,6 +21,7 @@ public class LiDAR {
     private float pitchFromPOVInDeg;
     private float rollFromPOVInDeg;
     private float maximumMeasurementDistanceInMeters;
+    private int frequency;
 
     private Player player;
     private ClientLevel level;
@@ -44,6 +45,30 @@ public class LiDAR {
         this.pitchFromPOVInDeg = pitchFromPOVInDeg;
         this.rollFromPOVInDeg = rollFromPOVInDeg;
         this.maximumMeasurementDistanceInMeters = maximumMeasurementDistanceInMeters;
+        this.frequency = 1;
+        this.player = player;
+        this.level = level;
+    }
+    public LiDAR(
+            float horizontalScanRadiusInDeg,
+            int horizontalScansPerRadius,
+            float yawFromPOVInDeg,
+            float pitchFromPOVInDeg,
+            float rollFromPOVInDeg,
+            float maximumMeasurementDistanceInMeters,
+            int frequency,
+            Player player,
+            ClientLevel level
+    ) {
+        this.verticalScanRadiusInDeg = 0;
+        this.verticalScansPerRadius = 0;
+        this.horizontalScanRadiusInDeg = horizontalScanRadiusInDeg;
+        this.horizontalScansPerRadius = horizontalScansPerRadius;
+        this.yawFromPOVInDeg = yawFromPOVInDeg;
+        this.pitchFromPOVInDeg = pitchFromPOVInDeg;
+        this.rollFromPOVInDeg = rollFromPOVInDeg;
+        this.maximumMeasurementDistanceInMeters = maximumMeasurementDistanceInMeters;
+        this.frequency = frequency;
         this.player = player;
         this.level = level;
     }
@@ -69,6 +94,32 @@ public class LiDAR {
         this.pitchFromPOVInDeg = pitchFromPOVInDeg;
         this.rollFromPOVInDeg = rollFromPOVInDeg;
         this.maximumMeasurementDistanceInMeters = maximumMeasurementDistanceInMeters;
+        this.frequency = 1;
+        this.player = player;
+        this.level = level;
+    }
+    public LiDAR(
+            float horizontalScanRadiusInDeg,
+            float verticalScanRadiusInDeg,
+            int horizontalScansPerRadius,
+            int verticalScansPerRadius,
+            float yawFromPOVInDeg,
+            float pitchFromPOVInDeg,
+            float rollFromPOVInDeg,
+            float maximumMeasurementDistanceInMeters,
+            int frequency,
+            Player player,
+            ClientLevel level
+    ) {
+        this.horizontalScanRadiusInDeg = horizontalScanRadiusInDeg;
+        this.verticalScanRadiusInDeg = verticalScanRadiusInDeg;
+        this.horizontalScansPerRadius = horizontalScansPerRadius;
+        this.verticalScansPerRadius = verticalScansPerRadius;
+        this.yawFromPOVInDeg = yawFromPOVInDeg;
+        this.pitchFromPOVInDeg = pitchFromPOVInDeg;
+        this.rollFromPOVInDeg = rollFromPOVInDeg;
+        this.maximumMeasurementDistanceInMeters = maximumMeasurementDistanceInMeters;
+        this.frequency = frequency;
         this.player = player;
         this.level = level;
     }
@@ -190,6 +241,14 @@ public class LiDAR {
 
     public ClientLevel getLevel() {
         return level;
+    }
+
+    public int getFrequencyInHz() {
+        return frequency;
+    }
+
+    public int getFrequencyInTicks() {
+        return 20 / frequency;
     }
 
 }
