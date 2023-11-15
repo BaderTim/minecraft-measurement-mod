@@ -37,7 +37,6 @@ public class MeasurementController {
     public MeasurementController() {
         System.out.println("Measure constructor");
         this.currentlyMeasuring = false;
-        this.saveInterval = Config.SAVE_INTERVAL.get();
         try {
             System.out.println("Creating directory: " + this.FILE_PATH);
             Files.createDirectories(Paths.get(this.FILE_PATH));
@@ -51,6 +50,7 @@ public class MeasurementController {
     }
 
     public void startMeasure() {
+        this.saveInterval = Config.SAVE_INTERVAL.get();
         LocalPlayer player = Minecraft.getInstance().player;
         assert player != null;
         if (Config.LIDAR1_SWITCH.get()) {
