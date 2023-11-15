@@ -41,6 +41,7 @@ public class Config  {
     public static final ForgeConfigSpec.ConfigValue<Integer> LIDAR3_MEASUREMENT_FREQUENCY_IN_HZ;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> IMU1_SWITCH;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IMU1_MEAUREMENT_FREQUENCY_IN_HZ;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> MULTITHREAD_SWITCH;
     public static final ForgeConfigSpec.ConfigValue<Integer> THREAD_COUNT_MULTIPLIER;
@@ -116,6 +117,8 @@ public class Config  {
 
         IMU1_SWITCH = BUILDER.comment("Activate/Deactivate IMU Sensor imu1 (active = true, inactive = false)")
                 .define("imu1_switch", true);
+        IMU1_MEAUREMENT_FREQUENCY_IN_HZ = BUILDER.comment("Measurement Frequency in Hz for IMU Sensor imu1 (allowed are: 1, 2, 4, 5, 10, 20)")
+                .define("imu1_measurement_frequency_in_hz", 10);
 
         MULTITHREAD_SWITCH = BUILDER.comment("Activate/Deactivate Multithreading (active = true, inactive = false)")
                 .define("multithread_switch", true);
