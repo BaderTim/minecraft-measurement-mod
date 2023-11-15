@@ -2,17 +2,14 @@ package io.github.mmm.measurement.devices.lidar;
 
 import io.github.mmm.measurement.devices.lidar.multithread.SubLiDARPipeline;
 import io.github.mmm.measurement.objects.Scan;
-import io.github.mmm.measurement.objects.Scan2D;
-import io.github.mmm.measurement.objects.Scan3D;
 import io.github.mmm.modconfig.Config;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 
 public class LiDARController {
 
     private final LiDAR[] lidars;
+    private ArrayList<Scan>[] scans;
     private int maxThreadCount;
 
     public LiDARController(LiDAR[] lidars) {
@@ -22,13 +19,27 @@ public class LiDARController {
             this.maxThreadCount = 1;
         }
         this.lidars = lidars;
+        this.scans = new ArrayList[this.lidars.length];
     }
 
-    public Scan[] getScansFromPOVToBlocks() {
+    public ArrayList<Scan>[] getScans() {
+        return this.scans;
+    }
+
+    public void clearScans() {
+        this.scans = new ArrayList[this.lidars.length];
+    }
+
+    public void scan() {
+        Scan[] currentScans;
         if(this.maxThreadCount == 1) {
-            return this.getScansSingleThreaded();
+            currentScans = this.getScansSingleThreaded();
+        } else {
+            currentScans = this.getScansMultiThreaded();
         }
-        return this.getScansMultiThreaded();
+        for(int i = 0; i < currentScans.length; i++) {
+            this.scans[i].add(currentScans[i]);
+        }
     }
 
     private Scan[] getScansSingleThreaded() {

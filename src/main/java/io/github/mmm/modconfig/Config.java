@@ -14,6 +14,7 @@ public class Config  {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> MULTITHREAD_SWITCH;
     public static final ForgeConfigSpec.ConfigValue<Integer> THREAD_COUNT_MULTIPLIER;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SAVE_INTERVAL;
 
     static {
         BUILDER.push("Configs for the Minecraft Measurement Mod");
@@ -32,6 +33,8 @@ public class Config  {
                 .define("multithread_switch", true);
         THREAD_COUNT_MULTIPLIER = BUILDER.comment("Multiplier for the amount of Threads. Default is 1, resulting in 1*LOGICAL_CORES_AMOUNT Threads")
                 .define("thread_count_multiplier", 1);
+        SAVE_INTERVAL = BUILDER.comment("Interval in ticks (1 tick usually takes 50ms) in which the data is saved to the file")
+                .define("save_interval", 1);
 
 
         BUILDER.pop();

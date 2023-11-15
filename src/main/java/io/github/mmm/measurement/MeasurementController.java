@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class MeasurementController {
 
     private Boolean currentlyMeasuring;
+    private int saveInterval;
 
     private final String FILE_PATH = Minecraft.getInstance().gameDirectory.getPath() + "/mmm_data/";
     private String startTime;
@@ -34,6 +35,7 @@ public class MeasurementController {
     public MeasurementController() {
         System.out.println("Measure constructor");
         this.currentlyMeasuring = false;
+        this.saveInterval = Config.SAVE_INTERVAL.get();
         try {
             System.out.println("Creating directory: " + this.FILE_PATH);
             Files.createDirectories(Paths.get(this.FILE_PATH));
@@ -122,6 +124,13 @@ public class MeasurementController {
         this.startTime = null;
     }
 
+    public void saveLiDARScansToFile(ArrayList<Scan> scans, String fileName) {
+        for(Scan scan : scans) {
+            if(scan == null) continue;
+            this.saveLiDARScanToFile(scan, fileName);
+        }
+    }
+
     public void saveLiDARScanToFile(Scan scan, String fileName) {
         long timestamp = System.currentTimeMillis();
         String distancesString = "";
@@ -181,4 +190,7 @@ public class MeasurementController {
         return imu1;
     }
 
+    public int getSaveInterval() {
+        return saveInterval;
+    }
 }
