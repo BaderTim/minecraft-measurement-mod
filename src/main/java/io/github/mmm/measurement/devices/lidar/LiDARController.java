@@ -2,6 +2,8 @@ package io.github.mmm.measurement.devices.lidar;
 
 import io.github.mmm.measurement.devices.lidar.multithread.SubLiDARPipeline;
 import io.github.mmm.measurement.objects.Scan;
+import io.github.mmm.measurement.objects.Scan2D;
+import io.github.mmm.measurement.objects.Scan3D;
 import io.github.mmm.modconfig.Config;
 
 import java.util.ArrayList;
@@ -179,11 +181,34 @@ public class LiDARController {
     }
 
     private Scan build2DScanFromSubScans(Scan[] subScans, LiDAR lidar) {
-        return null;
+        if (subScans.length == 1) {
+            return subScans[0];
+        }
+        Scan2D scan2D = new Scan2D(
+                lidar.getHorizontalScansPerRadius()
+        );
+        int currentScan = 0;
+        for(Scan scan : subScans) {
+            if(scan == null) break;
+            Scan2D scan2DToAdd = scan.getScan2D();
+            for(int i = 0; i < scan2DToAdd.getScansPerRadius(); i++) {
+                scan2D.setDistance(currentScan, scan2DToAdd.getDistance(i));
+                currentScan++;
+            }
+        }
+        return new Scan(scan2D);
     }
 
     private Scan build3DScanFromSubScans(Scan[] subScans, LiDAR lidar) {
-        return null;
+        // subScans are 2D scans
+        Scan3D scan3D = new Scan3D(
+                lidar.getHorizontalScansPerRadius(),
+                lidar.getVerticalScansPerRadius()
+        );
+        for(int i = 0; i < subScans.length; i++) {
+            scan3D.setScan2D(i, subScans[i].getScan2D());
+        }
+        return new Scan(scan3D);
     }
 
     private boolean isLidarAllowedToScan(LiDAR lidar) {
