@@ -46,6 +46,8 @@ public class Config  {
     public static final ForgeConfigSpec.ConfigValue<Boolean> MULTITHREAD_SWITCH;
     public static final ForgeConfigSpec.ConfigValue<Integer> THREAD_COUNT_MULTIPLIER;
     public static final ForgeConfigSpec.ConfigValue<Integer> SAVE_INTERVAL;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> TICK_TIME_WARNING;
+    public static final ForgeConfigSpec.ConfigValue<Integer> TICK_TIME_WARNING_TOLERANCE;
 
     static {
         BUILDER.push("mmm_config");
@@ -55,6 +57,10 @@ public class Config  {
                 .define("thread_count_multiplier", 1);
         SAVE_INTERVAL = BUILDER.comment("Interval in ticks (1 tick usually takes 50ms) in which the data is saved to the file")
                 .define("save_interval", 1);
+        TICK_TIME_WARNING = BUILDER.comment("Activate/Deactivate Tick Time Warning (active = true, inactive = false)")
+                .define("tick_time_warning", false);
+        TICK_TIME_WARNING_TOLERANCE = BUILDER.comment("Tolerance for the Tick Time Warning in MS. Default Tick Time is 50ms, this means a warning will appear when the Tick Time is longer than 50ms + tolerance.")
+                .define("tick_time_warning_tolerance", 5);
 
         BUILDER.push("lidar1");
         LIDAR1_SWITCH = BUILDER.comment("Activate/Deactivate LIDAR Sensor lidar1 (active = true, inactive = false)")

@@ -28,6 +28,9 @@ public class MeasurementController {
     private final String FILE_PATH = Minecraft.getInstance().gameDirectory.getPath() + "/mmm_data/";
     private String startTime;
 
+    private boolean tickTimeWarning = false;
+    private int tickTimeWarningTolerance;
+
     private LiDARController lidarController;
     private LiDAR lidar1;
     private LiDAR lidar2;
@@ -51,6 +54,8 @@ public class MeasurementController {
 
     public void startMeasure() {
         this.saveInterval = Config.SAVE_INTERVAL.get();
+        this.tickTimeWarning = Config.TICK_TIME_WARNING.get();
+        this.tickTimeWarningTolerance = Config.TICK_TIME_WARNING_TOLERANCE.get();
         LocalPlayer player = Minecraft.getInstance().player;
         assert player != null;
         if (Config.LIDAR1_SWITCH.get()) {
@@ -215,5 +220,13 @@ public class MeasurementController {
 
     public int getSaveInterval() {
         return saveInterval;
+    }
+
+    public boolean isTickTimeWarning() {
+        return tickTimeWarning;
+    }
+
+    public int getTickTimeWarningTolerance() {
+        return tickTimeWarningTolerance;
     }
 }
