@@ -4,6 +4,7 @@ public class Scan2D {
 
     private double[] distances;
     private int scansPerRadius;
+    private long timestamp;
 
     public Scan2D(int scansPerRadius) {
         if (scansPerRadius < 1) {
@@ -11,6 +12,7 @@ public class Scan2D {
         }
         this.scansPerRadius = scansPerRadius;
         this.distances = new double[scansPerRadius];
+        this.timestamp = System.currentTimeMillis();
     }
 
     @Override
@@ -37,4 +39,7 @@ public class Scan2D {
         return this.scansPerRadius;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
 }

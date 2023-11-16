@@ -4,6 +4,7 @@ public class Scan3D {
 
     private int scansPerHorizontalRadius;
     private int scansPerVerticalRadius;
+    private long timestamp;
     private Scan2D[] distances;
 
     public Scan3D(int scansPerHorizontalRadius, int scansPerVerticalRadius) {
@@ -15,6 +16,7 @@ public class Scan3D {
         this.scansPerHorizontalRadius = scansPerHorizontalRadius;
         this.scansPerVerticalRadius = scansPerVerticalRadius;
         this.distances = new Scan2D[scansPerVerticalRadius];
+        this.timestamp = System.currentTimeMillis();
     }
 
     @Override
@@ -51,4 +53,7 @@ public class Scan3D {
         return this.scansPerVerticalRadius;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
 }

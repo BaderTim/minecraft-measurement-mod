@@ -37,4 +37,12 @@ public class Scan {
         return is2D;
     }
 
+    public long getTimestamp() {
+        if (is2D) {
+            return scan2D.getTimestamp();
+        } else {
+            return scan3D.getTimestamp();
+        }
+    }
+
 }
