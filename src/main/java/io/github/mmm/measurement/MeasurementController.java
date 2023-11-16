@@ -138,14 +138,27 @@ public class MeasurementController {
     }
 
     public void saveLiDARScansToFile(ArrayList<Scan> scans, String fileName) {
+        String scansAsString = "";
+        long timestamp = System.currentTimeMillis();
+        int nullCounter = 0;
         for(int i = 0; i < scans.size(); i++) {
-            if(scans.get(i) == null) continue;
-            this.saveLiDARScanToFile(scans.get(i), fileName);
+            if(scans.get(i) == null) {
+                nullCounter++;
+                continue;
+            }
+            scansAsString += this.getLidarScanAsSaveString(scans.get(i), timestamp);
         }
+        if (nullCounter == scans.size()) return;
+        this.saveStringToFile(scansAsString, fileName);
     }
 
     public void saveLiDARScanToFile(Scan scan, String fileName) {
         long timestamp = System.currentTimeMillis();
+        String result = this.getLidarScanAsSaveString(scan, timestamp);
+        this.saveStringToFile(result, fileName);
+    }
+
+    private String getLidarScanAsSaveString(Scan scan, long timestamp) {
         String distancesString = "";
         if(scan.is2D()) {
             distancesString = java.util.Arrays.toString(scan.getScan2D().getDistances());
@@ -156,8 +169,7 @@ public class MeasurementController {
             }
             distancesString = "[" + distancesString + java.util.Arrays.toString(distances[distances.length - 1].getDistances()) + "]";
         }
-        String result = timestamp + ";" + distancesString + "\n";
-        this.saveStringToFile(result, fileName);
+        return timestamp + ";" + distancesString + "\n";
     }
 
     public void saveIMUScanToFile(double accX, double accY, double accZ, double gyroX, double gyroY, double gyroZ, double magX, double magY, double magZ, String fileName) {
