@@ -23,7 +23,7 @@ public class Measure {
             if (passedTicks % MEASUREMENT_CONTROLLER.getSaveInterval() == 0) {
                 ArrayList<Scan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
                 for (int i = 0; i < scans.length; i++) {
-                    MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + i + ".csv");
+                    MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
                 }
                 // TODO: implement IMU
 

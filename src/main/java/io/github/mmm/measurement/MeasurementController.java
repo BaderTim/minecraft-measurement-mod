@@ -123,7 +123,7 @@ public class MeasurementController {
         // save remaining scans
         ArrayList<Scan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
         for (int i = 0; i < scans.length; i++) {
-            MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + i + ".csv");
+            MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
         }
         MEASUREMENT_CONTROLLER.getLidarController().clearScans();
         // send stop message
@@ -138,9 +138,9 @@ public class MeasurementController {
     }
 
     public void saveLiDARScansToFile(ArrayList<Scan> scans, String fileName) {
-        for(Scan scan : scans) {
-            if(scan == null) continue;
-            this.saveLiDARScanToFile(scan, fileName);
+        for(int i = 0; i < scans.size(); i++) {
+            if(scans.get(i) == null) continue;
+            this.saveLiDARScanToFile(scans.get(i), fileName);
         }
     }
 
