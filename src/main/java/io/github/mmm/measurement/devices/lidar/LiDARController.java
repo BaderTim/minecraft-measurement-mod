@@ -21,6 +21,9 @@ public class LiDARController {
         }
         this.lidars = lidars;
         this.scans = new ArrayList[this.lidars.length];
+        for(int i = 0; i < this.lidars.length; i++) {
+            this.scans[i] = new ArrayList<>();
+        }
     }
 
     public ArrayList<Scan>[] getScans() {
@@ -29,6 +32,9 @@ public class LiDARController {
 
     public void clearScans() {
         this.scans = new ArrayList[this.lidars.length];
+        for(int i = 0; i < this.lidars.length; i++) {
+            this.scans[i] = new ArrayList<>();
+        }
     }
 
     public void scan() {
