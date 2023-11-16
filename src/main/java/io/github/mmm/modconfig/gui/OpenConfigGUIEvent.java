@@ -1,4 +1,4 @@
-package io.github.mmm.modconfig;
+package io.github.mmm.modconfig.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;

@@ -4,12 +4,14 @@
   "chat.mmm.measure.start": "§a[MMM] Started measuring.",
   "chat.mmm.measure.stop": "§c[MMM] Stopped measuring.",
 
+  "chat.mmm.gui.save.success": "§7[MMM] Saved config.",
+  "chat.mmm.gui.save.warn": "§7[MMM] A config entry was invalid and has been changed back.",
+
   "gui.mmm.controls.category.measurement": "Measurement",
   "gui.mmm.controls.measure": "Start/Stop Measuring",
   "gui.mmm.controls.settings": "Open Measurement Settings",
 
   "gui.mmm.settings.title": "Minecraft Measurement Mod Settings",
-  "gui.mmm.settings.text.description": "Choose your measurement devices and modify their attributes.",
 
   "gui.mmm.settings.exit.name": "Save & Exit",
   "gui.mmm.settings.exit.tooltip": "Save the current measurment settings and exit the menu.",
@@ -19,14 +21,20 @@
   "gui.mmm.settings.switch.tooltip.activate": "Activate the sensor (currently inactive).",
   "gui.mmm.settings.switch.tooltip.deactivate": "Deactivate the sensor (currently active).",
 
-  "gui.mmm.settings.lidar": "Lidar Sensors (2D/3D)",
-  "gui.mmm.settings.lidar1.name": "lidar1",
-  "gui.mmm.settings.lidar2.name": "lidar2",
-  "gui.mmm.settings.lidar3.name": "lidar3",
+  "gui.mmm.settings.lidar.title": "Lidar Sensors (2D/3D)",
+  "gui.mmm.settings.lidar.status": "Status",
+  "gui.mmm.settings.lidar.frequency": "Freq.",
+  "gui.mmm.settings.lidar.horizontal": "Horizontal\nAngle/Density",
+  "gui.mmm.settings.lidar.vertical": "Vertical\nAngle/Density",
+  "gui.mmm.settings.lidar.offset": "Yaw, Pitch & Roll",
+  "gui.mmm.settings.lidar.range": "Range",
 
-  "gui.mmm.settings.imu": "Inertial Measurement Unit",
-  "gui.mmm.settings.imu1.name": "imu1",
+  "gui.mmm.settings.lidar.lidar1.name": "lidar1",
+  "gui.mmm.settings.lidar.lidar2.name": "lidar2",
+  "gui.mmm.settings.lidar.lidar3.name": "lidar3",
 
-  "gui.mmm.settings.controls": "To change the key bindings, please head to the Controls menu.",
+  "gui.mmm.settings.imu.title": "Inertial Measurement Unit",
+  "gui.mmm.settings.imu.imu1.name": "imu1",
+
   "gui.mmm.settings.savepath": "Recorded data will be saved to .minecraft/mmm_data/<recording>"
 }

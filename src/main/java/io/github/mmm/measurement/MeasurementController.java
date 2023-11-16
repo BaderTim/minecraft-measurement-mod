@@ -55,14 +55,14 @@ public class MeasurementController {
         assert player != null;
         if (Config.LIDAR1_SWITCH.get()) {
             this.lidar1 = new LiDAR(
-                    Config.LIDAR1_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
-                    Config.LIDAR1_VERTICAL_SCANNING_RADIUS_IN_DEG.get(),
+                    (float)Config.LIDAR1_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
+                    (float)Config.LIDAR1_VERTICAL_SCANNING_RADIUS_IN_DEG.get(),
                     Config.LIDAR1_HORIZONTAL_SCANS_PER_RADIUS.get(),
                     Config.LIDAR1_VERTICAL_SCANS_PER_RADIUS.get(),
-                    Config.LIDAR1_YAW_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR1_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR1_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR1_MAXIMUM_MEASUREMENT_DISTANCE.get(),
+                    (float)Config.LIDAR1_YAW_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR1_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR1_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR1_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR1_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
                     Minecraft.getInstance().level
@@ -70,14 +70,14 @@ public class MeasurementController {
         }
         if (Config.LIDAR2_SWITCH.get()) {
             this.lidar2 = new LiDAR(
-                    Config.LIDAR2_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
-                    Config.LIDAR2_VERTICAL_SCANNING_RADIUS_IN_DEG.get(),
+                    (float)Config.LIDAR2_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
+                    (float)Config.LIDAR2_VERTICAL_SCANNING_RADIUS_IN_DEG.get(),
                     Config.LIDAR2_HORIZONTAL_SCANS_PER_RADIUS.get(),
                     Config.LIDAR2_VERTICAL_SCANS_PER_RADIUS.get(),
-                    Config.LIDAR2_YAW_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR2_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR2_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR2_MAXIMUM_MEASUREMENT_DISTANCE.get(),
+                    (float)Config.LIDAR2_YAW_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR2_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR2_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR2_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR2_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
                     Minecraft.getInstance().level
@@ -85,14 +85,14 @@ public class MeasurementController {
         }
         if (Config.LIDAR3_SWITCH.get()) {
             this.lidar3 = new LiDAR(
-                    Config.LIDAR3_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
-                    Config.LIDAR3_VERTICAL_SCANNING_RADIUS_IN_DEG.get(),
+                    (float)Config.LIDAR3_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
+                    (float)Config.LIDAR3_VERTICAL_SCANNING_RADIUS_IN_DEG.get(),
                     Config.LIDAR3_HORIZONTAL_SCANS_PER_RADIUS.get(),
                     Config.LIDAR3_VERTICAL_SCANS_PER_RADIUS.get(),
-                    Config.LIDAR3_YAW_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR3_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR3_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.LIDAR3_MAXIMUM_MEASUREMENT_DISTANCE.get(),
+                    (float)Config.LIDAR3_YAW_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR3_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR3_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
+                    (float)Config.LIDAR3_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR3_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
                     Minecraft.getInstance().level
