@@ -103,17 +103,17 @@ public class MeasurementController {
             this.imu1 = new IMU();
         }
 
-        if(lidar1 != null) this.saveStringToFile("timestamp;data\n", "lidar1.csv");
-        if(lidar2 != null) this.saveStringToFile("timestamp;data\n", "lidar2.csv");
-        if(lidar3 != null) this.saveStringToFile("timestamp;data\n", "lidar3.csv");
-        if(imu1 != null) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ;magX;magY;magZ\n", "imu1.csv");
-
         this.startTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
         try {
             Files.createDirectories(Paths.get(this.FILE_PATH+this.startTime));
         } catch (Exception e) {
             System.out.println("Error creating directory: " + e.getMessage());
         }
+
+        if(lidar1 != null) this.saveStringToFile("timestamp;data\n", "lidar1.csv");
+        if(lidar2 != null) this.saveStringToFile("timestamp;data\n", "lidar2.csv");
+        if(lidar3 != null) this.saveStringToFile("timestamp;data\n", "lidar3.csv");
+        if(imu1 != null) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ;magX;magY;magZ\n", "imu1.csv");
 
         player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
         this.currentlyMeasuring = true;
