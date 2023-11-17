@@ -6,13 +6,14 @@ The Minecraft Measurement Mod allows the terrain to be measured from the player'
 ## Example
 This example shows a LiDAR with a horizontal and vertical field of view of 60° and a resolution of 240x240 scans running at 1Hz.
 
+MMM in-game config for **lidar1**:
 ![LiDAR 60x60](./media/60x60_lidar.png)
 
-
-![LiDAR 60x60 Result](./media/60x60_lidar_res.png)
-
+CSV file for **lidar1**:
 ![LiDAR 60x60 Raw Data](./media/60x60_lidar_save.png)
 
+POV view vs. point cloud render of **lidar1**:
+![LiDAR 60x60 Result](./media/60x60_lidar_res.png)
 
 
 ## Setup
