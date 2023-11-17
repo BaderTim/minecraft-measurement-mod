@@ -1,13 +1,16 @@
 package io.github.mmm.measurement;
 
 import io.github.mmm.MMM;
-import io.github.mmm.measurement.devices.IMU;
+import io.github.mmm.measurement.devices.imu.IMU;
+import io.github.mmm.measurement.devices.imu.IMUController;
 import io.github.mmm.measurement.devices.lidar.LiDAR;
 import io.github.mmm.measurement.devices.lidar.LiDARController;
+import io.github.mmm.measurement.objects.ImuScan;
 import io.github.mmm.measurement.objects.LidarScan;
 import io.github.mmm.measurement.objects.LidarScan2D;
 import io.github.mmm.modconfig.Config;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
@@ -35,6 +38,8 @@ public class MeasurementController {
     private LiDAR lidar1;
     private LiDAR lidar2;
     private LiDAR lidar3;
+
+    private IMUController imuController;
     private IMU imu1;
 
     public MeasurementController() {
@@ -57,7 +62,9 @@ public class MeasurementController {
         this.tickTimeWarning = Config.TICK_TIME_WARNING.get();
         this.tickTimeWarningTolerance = Config.TICK_TIME_WARNING_TOLERANCE.get();
         LocalPlayer player = Minecraft.getInstance().player;
+        ClientLevel level = Minecraft.getInstance().level;
         assert player != null;
+        assert level != null;
         if (Config.LIDAR1_SWITCH.get()) {
             this.lidar1 = new LiDAR(
                     (float)Config.LIDAR1_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
@@ -70,7 +77,7 @@ public class MeasurementController {
                     (float)Config.LIDAR1_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR1_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
-                    Minecraft.getInstance().level
+                    level
             );
         }
         if (Config.LIDAR2_SWITCH.get()) {
@@ -85,7 +92,7 @@ public class MeasurementController {
                     (float)Config.LIDAR2_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR2_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
-                    Minecraft.getInstance().level
+                    level
             );
         }
         if (Config.LIDAR3_SWITCH.get()) {
@@ -100,13 +107,20 @@ public class MeasurementController {
                     (float)Config.LIDAR3_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR3_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
-                    Minecraft.getInstance().level
+                    level
             );
         }
         this.lidarController = new LiDARController(new LiDAR[]{lidar1, lidar2, lidar3});
         if (Config.IMU1_SWITCH.get()) {
-            this.imu1 = new IMU();
+            this.imu1 = new IMU(
+                    Config.IMU1_CONSIDER_GRAVITY.get(),
+                    Config.IMU1_YAW_OFFSET_FROM_POV_IN_DEG.get(),
+                    Config.IMU1_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
+                    Config.IMU1_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
+                    Config.IMU1_MEAUREMENT_FREQUENCY_IN_HZ.get()
+            );
         }
+        this.imuController = new IMUController(imu1);
 
         this.startTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
         try {
@@ -118,7 +132,7 @@ public class MeasurementController {
         if(lidar1 != null) this.saveStringToFile("timestamp;data\n", "lidar1.csv");
         if(lidar2 != null) this.saveStringToFile("timestamp;data\n", "lidar2.csv");
         if(lidar3 != null) this.saveStringToFile("timestamp;data\n", "lidar3.csv");
-        if(imu1 != null) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ;magX;magY;magZ\n", "imu1.csv");
+        if(imu1 != null) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ\n", "imu1.csv");
 
         player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
         this.currentlyMeasuring = true;
@@ -131,6 +145,8 @@ public class MeasurementController {
             MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
         }
         MEASUREMENT_CONTROLLER.getLidarController().clearScans();
+        ArrayList<ImuScan> imuScans = MEASUREMENT_CONTROLLER.getImuController().getScans();
+        MEASUREMENT_CONTROLLER.saveIMUScansToFile(imuScans, "imu1.csv");
         // send stop message
         Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.stop"), false);
         // reset
@@ -138,7 +154,9 @@ public class MeasurementController {
         this.lidar1 = null;
         this.lidar2 = null;
         this.lidar3 = null;
+        this.lidarController = null;
         this.imu1 = null;
+        this.imuController = null;
         this.startTime = null;
     }
 
@@ -175,10 +193,16 @@ public class MeasurementController {
         return scan.getTimestamp() + ";" + distancesString + "\n";
     }
 
-    public void saveIMUScanToFile(double accX, double accY, double accZ, double gyroX, double gyroY, double gyroZ, double magX, double magY, double magZ, String fileName) {
-        long timestamp = System.currentTimeMillis();
-        String result = timestamp + ";" + accX + ";" + accY + ";" + accZ + ";" + gyroX + ";" + gyroY + ";" + gyroZ + ";" + magX + ";" + magY + ";" + magZ + "\n";
-        this.saveStringToFile(result, fileName);
+    public void saveIMUScansToFile(ArrayList<ImuScan> scans, String fileName) {
+        String imuString = "";
+        for(int i = 0; i < scans.size(); i++) {
+            imuString += this.getImuScanAsSaveString(scans.get(i));
+        }
+        this.saveStringToFile(imuString, fileName);
+    }
+
+    private String getImuScanAsSaveString(ImuScan scan) {
+        return scan.getTimestamp() + ";" + scan.getAccX() + ";" + scan.getAccY() + ";" + scan.getAccZ() + ";" + scan.getGyroX() + ";" + scan.getGyroY() + ";" + scan.getGyroZ() + "\n";
     }
 
 
@@ -196,6 +220,10 @@ public class MeasurementController {
         } catch (Exception e) {
             System.out.println("Error writing file: " + e.getMessage());
         }
+    }
+
+    public int getFrequencyInTicks(int frequency) {
+        return 20 / frequency;
     }
 
     public LiDARController getLidarController() {
@@ -228,5 +256,9 @@ public class MeasurementController {
 
     public int getTickTimeWarningTolerance() {
         return tickTimeWarningTolerance;
+    }
+
+    public IMUController getImuController() {
+        return imuController;
     }
 }

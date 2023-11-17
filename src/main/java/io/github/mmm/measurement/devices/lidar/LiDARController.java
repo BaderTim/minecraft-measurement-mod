@@ -8,6 +8,8 @@ import io.github.mmm.modconfig.Config;
 
 import java.util.ArrayList;
 
+import static io.github.mmm.MMM.MEASUREMENT_CONTROLLER;
+
 public class LiDARController {
 
     private final LiDAR[] lidars;
@@ -225,7 +227,7 @@ public class LiDARController {
     }
 
     private boolean isLidarAllowedToScan(LiDAR lidar) {
-        return lidar != null && this.passedTicks % lidar.getFrequencyInTicks() == 0;
+        return lidar != null && this.passedTicks % MEASUREMENT_CONTROLLER.getFrequencyInTicks(lidar.getFrequency()) == 0;
     }
 
 }

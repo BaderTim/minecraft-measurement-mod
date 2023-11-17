@@ -243,12 +243,8 @@ public class LiDAR {
         return level;
     }
 
-    public int getFrequencyInHz() {
+    public int getFrequency() {
         return frequency;
-    }
-
-    public int getFrequencyInTicks() {
-        return 20 / frequency;
     }
 
 }
