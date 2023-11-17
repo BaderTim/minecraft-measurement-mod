@@ -3,6 +3,18 @@
 
 The Minecraft Measurement Mod allows the terrain to be measured from the player's perspective. Various measuring devices, such as LiDAR sensors, can be simulated. The measurement data can be saved externally.
 
+## Example
+This example shows a LiDAR with a horizontal and vertical field of view of 60° and a resolution of 240x240 scans running at 1Hz.
+
+![LiDAR 60x60](./media/60x60_lidar.png)
+
+
+![LiDAR 60x60 Result](./media/60x60_lidar_res.png)
+
+![LiDAR 60x60 Raw Data](./media/60x60_lidar_save.png)
+
+
+
 ## Setup
 The recommended Minecraft version is `1.20.*`.
 1. Download and install [Minecraft Forge](https://files.minecraftforge.net/net/minecraftforge/forge/)
