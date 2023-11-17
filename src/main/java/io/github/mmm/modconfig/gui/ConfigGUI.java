@@ -204,19 +204,19 @@ public class ConfigGUI extends Screen {
                 this.font, 320, lidar2Y, 30, 20,
                 null);
         Lidar2YawOffsetEditBox.setMaxLength(3);
-        Lidar2YawOffsetEditBox.setValue(String.valueOf(Config.LIDAR1_YAW_OFFSET_FROM_POV_IN_DEG.get()));
+        Lidar2YawOffsetEditBox.setValue(String.valueOf(Config.LIDAR2_YAW_OFFSET_FROM_POV_IN_DEG.get()));
         addRenderableWidget(Lidar2YawOffsetEditBox);
         Lidar2PitchOffsetEditBox = new EditBox(
                 this.font, 350, lidar2Y, 30, 20,
                 null);
         Lidar2PitchOffsetEditBox.setMaxLength(3);
-        Lidar2PitchOffsetEditBox.setValue(String.valueOf(Config.LIDAR1_PITCH_OFFSET_FROM_POV_IN_DEG.get()));
+        Lidar2PitchOffsetEditBox.setValue(String.valueOf(Config.LIDAR2_PITCH_OFFSET_FROM_POV_IN_DEG.get()));
         addRenderableWidget(Lidar2PitchOffsetEditBox);
         Lidar2RollOffsetEditBox = new EditBox(
                 this.font, 380, lidar2Y, 30, 20,
                 null);
         Lidar2RollOffsetEditBox.setMaxLength(3);
-        Lidar2RollOffsetEditBox.setValue(String.valueOf(Config.LIDAR1_ROLL_OFFSET_FROM_POV_IN_DEG.get()));
+        Lidar2RollOffsetEditBox.setValue(String.valueOf(Config.LIDAR2_ROLL_OFFSET_FROM_POV_IN_DEG.get()));
         addRenderableWidget(Lidar2RollOffsetEditBox);
         Lidar2MaxMeasurementDistanceEditBox = new EditBox(
                 this.font, 420, lidar2Y, 40, 20,
