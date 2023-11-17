@@ -1,16 +1,16 @@
 package io.github.mmm.measurement.devices.lidar.multithread;
 
 import io.github.mmm.measurement.devices.lidar.LiDAR;
-import io.github.mmm.measurement.objects.Scan;
+import io.github.mmm.measurement.objects.LidarScan;
 
 public class SubLiDARPipeline implements Runnable {
 
     private final LiDAR[] subLidars;
-    private volatile Scan[] scans;
+    private volatile LidarScan[] scans;
 
     public SubLiDARPipeline(LiDAR[] subLidars) {
         this.subLidars = subLidars;
-        this.scans = new Scan[this.subLidars.length];
+        this.scans = new LidarScan[this.subLidars.length];
     }
 
     @Override
@@ -24,7 +24,7 @@ public class SubLiDARPipeline implements Runnable {
         }
     }
 
-    public Scan[] getScans() {
+    public LidarScan[] getScans() {
         return this.scans;
     }
 }

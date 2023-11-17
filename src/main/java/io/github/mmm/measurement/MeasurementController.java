@@ -4,8 +4,8 @@ import io.github.mmm.MMM;
 import io.github.mmm.measurement.devices.IMU;
 import io.github.mmm.measurement.devices.lidar.LiDAR;
 import io.github.mmm.measurement.devices.lidar.LiDARController;
-import io.github.mmm.measurement.objects.Scan;
-import io.github.mmm.measurement.objects.Scan2D;
+import io.github.mmm.measurement.objects.LidarScan;
+import io.github.mmm.measurement.objects.LidarScan2D;
 import io.github.mmm.modconfig.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -126,7 +126,7 @@ public class MeasurementController {
 
     public void stopMeasure() {
         // save remaining scans
-        ArrayList<Scan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
+        ArrayList<LidarScan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
         for (int i = 0; i < scans.length; i++) {
             MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
         }
@@ -142,7 +142,7 @@ public class MeasurementController {
         this.startTime = null;
     }
 
-    public void saveLiDARScansToFile(ArrayList<Scan> scans, String fileName) {
+    public void saveLiDARScansToFile(ArrayList<LidarScan> scans, String fileName) {
         String scansAsString = "";
         int nullCounter = 0;
         for(int i = 0; i < scans.size(); i++) {
@@ -156,17 +156,17 @@ public class MeasurementController {
         this.saveStringToFile(scansAsString, fileName);
     }
 
-    public void saveLiDARScanToFile(Scan scan, String fileName) {
+    public void saveLiDARScanToFile(LidarScan scan, String fileName) {
         String result = this.getLidarScanAsSaveString(scan);
         this.saveStringToFile(result, fileName);
     }
 
-    private String getLidarScanAsSaveString(Scan scan) {
+    private String getLidarScanAsSaveString(LidarScan scan) {
         String distancesString = "";
         if(scan.is2D()) {
             distancesString = java.util.Arrays.toString(scan.getScan2D().getDistances());
         } else {
-            Scan2D[] distances = scan.getScan3D().getDistances();
+            LidarScan2D[] distances = scan.getScan3D().getDistances();
             for (int i = 0; i < distances.length - 1; i++) {
                 distancesString += java.util.Arrays.toString(distances[i].getDistances()) + ",";
             }

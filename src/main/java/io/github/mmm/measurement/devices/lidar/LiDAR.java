@@ -1,8 +1,8 @@
 package io.github.mmm.measurement.devices.lidar;
 
-import io.github.mmm.measurement.objects.Scan;
-import io.github.mmm.measurement.objects.Scan2D;
-import io.github.mmm.measurement.objects.Scan3D;
+import io.github.mmm.measurement.objects.LidarScan;
+import io.github.mmm.measurement.objects.LidarScan2D;
+import io.github.mmm.measurement.objects.LidarScan3D;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -124,30 +124,30 @@ public class LiDAR {
         this.level = level;
     }
 
-    public Scan scanFromPOVToBlocks() {
+    public LidarScan scanFromPOVToBlocks() {
         if(verticalScanRadiusInDeg == 0 && verticalScansPerRadius == 0) {
-            return new Scan(this.get2DScanFromPOVToBlocks());
+            return new LidarScan(this.get2DScanFromPOVToBlocks());
         } else {
-            return new Scan(this.get3DScanFromPOVToBlocks());
+            return new LidarScan(this.get3DScanFromPOVToBlocks());
         }
     }
 
-    private Scan3D get3DScanFromPOVToBlocks() {
+    private LidarScan3D get3DScanFromPOVToBlocks() {
         float verticalScanAngleDifferenceInDeg = verticalScanRadiusInDeg / verticalScansPerRadius;
         float pitchFromPOVInDegOffset = pitchFromPOVInDeg + (verticalScanRadiusInDeg / 2); // start at the top of the scan
-        Scan3D scan3D = new Scan3D(horizontalScansPerRadius, verticalScansPerRadius);
+        LidarScan3D scan3D = new LidarScan3D(horizontalScansPerRadius, verticalScansPerRadius);
         for(int i = 0; i < verticalScansPerRadius; i++) {
             float pitchFromPOVFor3DScanInDeg2D = pitchFromPOVInDegOffset - i * verticalScanAngleDifferenceInDeg;
-            Scan2D scan2D = this.get2DScanFromPOVToBlocks(pitchFromPOVFor3DScanInDeg2D);
+            LidarScan2D scan2D = this.get2DScanFromPOVToBlocks(pitchFromPOVFor3DScanInDeg2D);
             scan3D.setScan2D(i, scan2D);
         }
         return scan3D;
     }
 
-    private Scan2D get2DScanFromPOVToBlocks() {
+    private LidarScan2D get2DScanFromPOVToBlocks() {
         float scanAngleDifferenceInDeg = horizontalScanRadiusInDeg / horizontalScansPerRadius;
         float yawFromPOVInDegOffset = yawFromPOVInDeg - (horizontalScanRadiusInDeg / 2); // start at the left side of the scan
-        Scan2D scan = new Scan2D(horizontalScansPerRadius);
+        LidarScan2D scan = new LidarScan2D(horizontalScansPerRadius);
         for(int i = 0; i < horizontalScansPerRadius; i++) {
             float yawFromPOVInDeg1D = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;
             scan.setDistance(i, this.getDistanceFromPOVToBlock(yawFromPOVInDeg1D));
@@ -156,10 +156,10 @@ public class LiDAR {
     }
 
     // overloaded method for 3D scan
-    private Scan2D get2DScanFromPOVToBlocks(float pitchFromPOVFor3DScanInDeg2D) {
+    private LidarScan2D get2DScanFromPOVToBlocks(float pitchFromPOVFor3DScanInDeg2D) {
         float scanAngleDifferenceInDeg = horizontalScanRadiusInDeg / horizontalScansPerRadius;
         float yawFromPOVInDegOffset = yawFromPOVInDeg - (horizontalScanRadiusInDeg / 2); // start at the left side of the scan
-        Scan2D scan = new Scan2D(horizontalScansPerRadius);
+        LidarScan2D scan = new LidarScan2D(horizontalScansPerRadius);
         for(int i = 0; i < horizontalScansPerRadius; i++) {
             float yawFromPOVFor2DScanInDeg = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;
             scan.setDistance(i, this.getDistanceFromPOVToBlock(yawFromPOVFor2DScanInDeg, pitchFromPOVFor3DScanInDeg2D));

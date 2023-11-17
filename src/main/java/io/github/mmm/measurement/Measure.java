@@ -1,6 +1,6 @@
 package io.github.mmm.measurement;
 
-import io.github.mmm.measurement.objects.Scan;
+import io.github.mmm.measurement.objects.LidarScan;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,7 +21,7 @@ public class Measure {
         if (event.phase == TickEvent.Phase.END && MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
             MEASUREMENT_CONTROLLER.getLidarController().scan(passedTicks);
             if (passedTicks % MEASUREMENT_CONTROLLER.getSaveInterval() == 0) {
-                ArrayList<Scan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
+                ArrayList<LidarScan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
                 for (int i = 0; i < scans.length; i++) {
                     MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
                 }

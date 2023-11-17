@@ -1,9 +1,9 @@
 package io.github.mmm.measurement.devices.lidar;
 
 import io.github.mmm.measurement.devices.lidar.multithread.SubLiDARPipeline;
-import io.github.mmm.measurement.objects.Scan;
-import io.github.mmm.measurement.objects.Scan2D;
-import io.github.mmm.measurement.objects.Scan3D;
+import io.github.mmm.measurement.objects.LidarScan;
+import io.github.mmm.measurement.objects.LidarScan2D;
+import io.github.mmm.measurement.objects.LidarScan3D;
 import io.github.mmm.modconfig.Config;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class LiDARController {
 
     private final LiDAR[] lidars;
-    private ArrayList<Scan>[] scans;
+    private ArrayList<LidarScan>[] scans;
     private int maxThreadCount;
     private int passedTicks;
 
@@ -28,7 +28,7 @@ public class LiDARController {
         }
     }
 
-    public ArrayList<Scan>[] getScans() {
+    public ArrayList<LidarScan>[] getScans() {
         return this.scans;
     }
 
@@ -50,7 +50,7 @@ public class LiDARController {
     }
 
     private void executeScan() {
-        Scan[] currentScans;
+        LidarScan[] currentScans;
         if(this.maxThreadCount == 1) {
             currentScans = this.getScansSingleThreaded();
         } else {
@@ -61,8 +61,8 @@ public class LiDARController {
         }
     }
 
-    private Scan[] getScansSingleThreaded() {
-        Scan[] scans = new Scan[this.lidars.length];
+    private LidarScan[] getScansSingleThreaded() {
+        LidarScan[] scans = new LidarScan[this.lidars.length];
         for (int i = 0; i < this.lidars.length; i++) {
             if(this.isLidarAllowedToScan(this.lidars[i])) {
                 scans[i] = this.lidars[i].scanFromPOVToBlocks();
@@ -73,7 +73,7 @@ public class LiDARController {
         return scans;
     }
 
-    private Scan[] getScansMultiThreaded() {
+    private LidarScan[] getScansMultiThreaded() {
         int[] subLidarsPerLidar = new int[this.lidars.length];
         ArrayList<LiDAR> subLidars = new ArrayList<>();
         // slice main lidars into sublidars
@@ -118,10 +118,10 @@ public class LiDARController {
         // get scans from threads
         int parsedSubLidars = 0;
         int currentLidar = 0;
-        Scan[] scans = new Scan[this.lidars.length];
-        ArrayList<Scan> scansForLidar = new ArrayList<>();
+        LidarScan[] scans = new LidarScan[this.lidars.length];
+        ArrayList<LidarScan> scansForLidar = new ArrayList<>();
         for(int i = 0; i < pipelines.length; i++) { // loop through threads
-            Scan[] subScans = pipelines[i].getScans();
+            LidarScan[] subScans = pipelines[i].getScans();
             for(int s=0; s < subScans.length; s++) { // loop through every scan of current thread
                 if(subScans[s] == null) break;
                 if(parsedSubLidars == subLidarsPerLidar[currentLidar]) {
@@ -130,7 +130,7 @@ public class LiDARController {
                         currentLidar++;
                         break;
                     }
-                    Scan[] scansForLidarTemp = new Scan[scansForLidar.size()];
+                    LidarScan[] scansForLidarTemp = new LidarScan[scansForLidar.size()];
                     scansForLidarTemp = scansForLidar.toArray(scansForLidarTemp);
                     scans[currentLidar] = this.buildScanFromSubScans(
                             scansForLidarTemp,
@@ -146,7 +146,7 @@ public class LiDARController {
         // get last scan
         if(parsedSubLidars == subLidarsPerLidar[currentLidar]) {
             if(this.isLidarAllowedToScan(this.lidars[currentLidar])) {
-                Scan[] scansForLidarTemp = new Scan[scansForLidar.size()];
+                LidarScan[] scansForLidarTemp = new LidarScan[scansForLidar.size()];
                 scansForLidarTemp = scansForLidar.toArray(scansForLidarTemp);
                 scans[currentLidar] = this.buildScanFromSubScans(
                         scansForLidarTemp,
@@ -185,7 +185,7 @@ public class LiDARController {
         return subLidars;
     }
 
-    private Scan buildScanFromSubScans(Scan[] subScans, LiDAR lidar) {
+    private LidarScan buildScanFromSubScans(LidarScan[] subScans, LiDAR lidar) {
         if(lidar.getVerticalScanRadiusInDeg() == 0) { // 2D
             return this.build2DScanFromSubScans(subScans, lidar);
         } else { // 3D
@@ -193,35 +193,35 @@ public class LiDARController {
         }
     }
 
-    private Scan build2DScanFromSubScans(Scan[] subScans, LiDAR lidar) {
+    private LidarScan build2DScanFromSubScans(LidarScan[] subScans, LiDAR lidar) {
         if (subScans.length == 1) {
             return subScans[0];
         }
-        Scan2D scan2D = new Scan2D(
+        LidarScan2D scan2D = new LidarScan2D(
                 lidar.getHorizontalScansPerRadius()
         );
         int currentScan = 0;
-        for(Scan scan : subScans) {
+        for(LidarScan scan : subScans) {
             if(scan == null) break;
-            Scan2D scan2DToAdd = scan.getScan2D();
+            LidarScan2D scan2DToAdd = scan.getScan2D();
             for(int i = 0; i < scan2DToAdd.getScansPerRadius(); i++) {
                 scan2D.setDistance(currentScan, scan2DToAdd.getDistance(i));
                 currentScan++;
             }
         }
-        return new Scan(scan2D);
+        return new LidarScan(scan2D);
     }
 
-    private Scan build3DScanFromSubScans(Scan[] subScans, LiDAR lidar) {
+    private LidarScan build3DScanFromSubScans(LidarScan[] subScans, LiDAR lidar) {
         // subScans are 2D scans
-        Scan3D scan3D = new Scan3D(
+        LidarScan3D scan3D = new LidarScan3D(
                 lidar.getHorizontalScansPerRadius(),
                 lidar.getVerticalScansPerRadius()
         );
         for(int i = 0; i < subScans.length; i++) {
             scan3D.setScan2D(i, subScans[i].getScan2D());
         }
-        return new Scan(scan3D);
+        return new LidarScan(scan3D);
     }
 
     private boolean isLidarAllowedToScan(LiDAR lidar) {

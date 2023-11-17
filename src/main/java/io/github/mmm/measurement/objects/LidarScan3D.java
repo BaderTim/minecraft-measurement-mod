@@ -1,13 +1,13 @@
 package io.github.mmm.measurement.objects;
 
-public class Scan3D {
+public class LidarScan3D {
 
     private int scansPerHorizontalRadius;
     private int scansPerVerticalRadius;
     private long timestamp;
-    private Scan2D[] distances;
+    private LidarScan2D[] distances;
 
-    public Scan3D(int scansPerHorizontalRadius, int scansPerVerticalRadius) {
+    public LidarScan3D(int scansPerHorizontalRadius, int scansPerVerticalRadius) {
         if (scansPerHorizontalRadius < 1) {
             throw new IllegalArgumentException("scansPerHorizontalRadius must be greater than 0");
         } else if (scansPerVerticalRadius < 1) {
@@ -15,7 +15,7 @@ public class Scan3D {
         }
         this.scansPerHorizontalRadius = scansPerHorizontalRadius;
         this.scansPerVerticalRadius = scansPerVerticalRadius;
-        this.distances = new Scan2D[scansPerVerticalRadius];
+        this.distances = new LidarScan2D[scansPerVerticalRadius];
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -33,15 +33,15 @@ public class Scan3D {
                 "]}";
     }
 
-    public void setScan2D(int scanNumber, Scan2D scan2D) {
+    public void setScan2D(int scanNumber, LidarScan2D scan2D) {
         this.distances[scanNumber] = scan2D;
     }
 
-    public Scan2D getScan2D(int scanNumber) {
+    public LidarScan2D getScan2D(int scanNumber) {
         return this.distances[scanNumber];
     }
 
-    public Scan2D[] getDistances() {
+    public LidarScan2D[] getDistances() {
         return this.distances;
     }
 

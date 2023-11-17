@@ -1,12 +1,12 @@
 package io.github.mmm.measurement.objects;
 
-public class Scan2D {
+public class LidarScan2D {
 
     private double[] distances;
     private int scansPerRadius;
     private long timestamp;
 
-    public Scan2D(int scansPerRadius) {
+    public LidarScan2D(int scansPerRadius) {
         if (scansPerRadius < 1) {
             throw new IllegalArgumentException("scansPerRadius must be greater than 0");
         }
