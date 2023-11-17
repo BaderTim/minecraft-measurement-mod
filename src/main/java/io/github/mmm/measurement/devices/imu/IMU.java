@@ -5,6 +5,9 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class IMU {
 
     private static final double G = 9.80665;
@@ -36,7 +39,6 @@ public class IMU {
 
         Vector3f linearAcceleration = calculateLinearAcceleration(linearVelocity, angularVelocity,
                 rotationMatrixCurrent, rotationMatrixPrevious);
-
         return new ImuScan(
                 linearAcceleration.x,
                 linearAcceleration.y,

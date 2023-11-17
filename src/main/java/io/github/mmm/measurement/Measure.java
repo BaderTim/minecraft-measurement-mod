@@ -31,8 +31,8 @@ public class Measure {
             if (MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
                 MEASUREMENT_CONTROLLER.getImuController().scan(passedTicks, currentPosition, previousPosition, currentRotation, previousRotation);
                 MEASUREMENT_CONTROLLER.getLidarController().scan(passedTicks);
-                if (passedTicks % MEASUREMENT_CONTROLLER.getSaveInterval() == 0) {
-                    MEASUREMENT_CONTROLLER.saveIMUScansToFile(MEASUREMENT_CONTROLLER.getImuController().getScans(), "imu.csv");
+                if (passedTicks > 0 && passedTicks % MEASUREMENT_CONTROLLER.getSaveInterval() == 0) {
+                    MEASUREMENT_CONTROLLER.saveIMUScansToFile(MEASUREMENT_CONTROLLER.getImuController().getScans(), "imu1.csv");
                     ArrayList<LidarScan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
                     for (int i = 0; i < scans.length; i++) {
                         MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
