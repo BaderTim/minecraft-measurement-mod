@@ -10,7 +10,7 @@ and a resolution of 240x240 distance scans running at 1Hz.
 MMM in-game config for **lidar1**:
 ![LiDAR 60x60](./media/60x60_lidar.png)
 
-CSV file for **lidar1**:
+CSV file produced by **lidar1**:
 ![LiDAR 60x60 Raw Data](./media/60x60_lidar_save.png)
 
 POV view vs. depth map view of point cloud from **lidar1**:
