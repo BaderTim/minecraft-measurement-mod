@@ -22,14 +22,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static io.github.mmm.MMM.DEVICE_CONTROLLER;
+import static io.github.mmm.MMM.MMM_ROOT_PATH;
 
 public class DeviceController {
 
     private Boolean currentlyMeasuring;
     private int saveInterval;
 
-    private final String FILE_PATH = Minecraft.getInstance().gameDirectory.getPath() + "/mmm_data/";
-    private String startTime;
+    private String savePath;
 
     private boolean tickTimeWarning = false;
     private int tickTimeWarningTolerance;
@@ -48,12 +48,6 @@ public class DeviceController {
     public DeviceController() {
         System.out.println("Measure constructor");
         this.currentlyMeasuring = false;
-        try {
-            System.out.println("Creating directory: " + this.FILE_PATH);
-            Files.createDirectories(Paths.get(this.FILE_PATH));
-        } catch (Exception e) {
-            System.out.println("Error creating directory: " + e.getMessage());
-        }
     }
 
     public Boolean isCurrentlyMeasuring() {
@@ -67,9 +61,10 @@ public class DeviceController {
         this.lidarController = new LiDARController(new LiDAR[]{lidar1, lidar2, lidar3});
         this.imuController = new IMUController(imu1);
 
-        this.startTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
+        String startTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
+        this.savePath = "device_measurements/" + startTime;
         try {
-            Files.createDirectories(Paths.get(this.FILE_PATH+this.startTime));
+            Files.createDirectories(Paths.get(MMM_ROOT_PATH + this.savePath));
         } catch (Exception e) {
             System.out.println("Error creating directory: " + e.getMessage());
         }
@@ -98,7 +93,6 @@ public class DeviceController {
         this.currentlyMeasuring = false;
         this.lidarController = null;
         this.imuController = null;
-        this.startTime = null;
     }
 
     public void initDevices() {
@@ -213,7 +207,7 @@ public class DeviceController {
 
 
     private void saveStringToFile(String newData, String fileName) {
-        final String savePath = this.FILE_PATH + this.startTime + "/" + fileName;
+        final String savePath = MMM_ROOT_PATH + this.savePath + "/" + fileName;
         try {
             // Open the file in "rw" mode (read and write)
             RandomAccessFile file = new RandomAccessFile(savePath, "rw");
