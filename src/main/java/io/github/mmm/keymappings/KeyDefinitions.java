@@ -12,6 +12,7 @@ public class KeyDefinitions {
 
     private static final Component CATEGORY = Component.translatable("gui." + MMM.MODID + ".controls.category.measurement");
     private static final Component MEASURE = Component.translatable("gui." + MMM.MODID + ".controls.measure");
+    private static final Component VISUALIZE = Component.translatable("gui." + MMM.MODID + ".controls.visualize");
     private static final Component SETTINGS = Component.translatable("gui." + MMM.MODID + ".controls.settings");
 
     public static final Lazy<KeyMapping> MEASURE_MAPPING = Lazy.of(() -> new KeyMapping(
@@ -28,7 +29,16 @@ public class KeyDefinitions {
             KeyConflictContext.UNIVERSAL,
             KeyModifier.NONE,
             InputConstants.Type.KEYSYM,
-            InputConstants.KEY_Y,
+            InputConstants.KEY_Z,
+            CATEGORY.getString()
+    ));
+
+    public static final Lazy<KeyMapping> VISUALIZE_MAPPING = Lazy.of(() -> new KeyMapping(
+            VISUALIZE.getString(),
+            KeyConflictContext.UNIVERSAL,
+            KeyModifier.NONE,
+            InputConstants.Type.KEYSYM,
+            InputConstants.KEY_V,
             CATEGORY.getString()
     ));
 

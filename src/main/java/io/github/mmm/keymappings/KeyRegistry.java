@@ -6,8 +6,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static io.github.mmm.MMM.MODID;
-import static io.github.mmm.keymappings.KeyDefinitions.MEASURE_MAPPING;
-import static io.github.mmm.keymappings.KeyDefinitions.SETTINGS_MAPPING;
+import static io.github.mmm.keymappings.KeyDefinitions.*;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class KeyRegistry {
@@ -16,5 +15,6 @@ public class KeyRegistry {
     public static void registerBindings(RegisterKeyMappingsEvent event) {
         event.register(SETTINGS_MAPPING.get());
         event.register(MEASURE_MAPPING.get());
+        event.register(VISUALIZE_MAPPING.get());
     }
 }

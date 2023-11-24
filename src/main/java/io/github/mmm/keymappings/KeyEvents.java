@@ -1,12 +1,14 @@
 package io.github.mmm.keymappings;
 
+import io.github.mmm.modconfig.gui.ConfigGUI;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static io.github.mmm.MMM.*;
-import static io.github.mmm.keymappings.KeyDefinitions.MEASURE_MAPPING;
+import static io.github.mmm.keymappings.KeyDefinitions.*;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class KeyEvents {
@@ -18,11 +20,16 @@ public class KeyEvents {
         if (event.phase == TickEvent.Phase.END) {
             if (MEASURE_MAPPING.get().consumeClick()) {
                 LOGGER.info("MEASURE_START_STOP_MAPPING is pressed");
-                if(MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
+                if (MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
                     MEASUREMENT_CONTROLLER.stopMeasure();
                 } else {
                     MEASUREMENT_CONTROLLER.startMeasure();
                 }
+            } else if (SETTINGS_MAPPING.get().consumeClick()) {
+                LOGGER.info("SETTINGS_MAPPING is pressed");
+                Minecraft.getInstance().setScreen(new ConfigGUI());
+            } else if (VISUALIZE_MAPPING.get().consumeClick()) {
+                LOGGER.info("VISUALIZE_MAPPING is pressed");
             }
         }
     }

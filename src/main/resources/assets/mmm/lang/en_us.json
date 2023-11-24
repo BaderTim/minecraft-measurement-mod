@@ -10,6 +10,7 @@
   "gui.mmm.controls.category.measurement": "Measurement",
   "gui.mmm.controls.measure": "Start/Stop Measuring",
   "gui.mmm.controls.settings": "Open Measurement Settings",
+  "gui.mmm.controls.visualize": "Visualize Devices",
 
   "gui.mmm.settings.title": "Minecraft Measurement Mod Settings",
 
