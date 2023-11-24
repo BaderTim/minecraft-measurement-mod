@@ -6,6 +6,7 @@ import io.github.mmm.measurement.survey.SurveyController;
 import io.github.mmm.modconfig.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -55,7 +56,7 @@ public class MMM {
     }
 
     @SubscribeEvent
-    public void fmlClientSetupEvent(FMLClientSetupEvent event) {
+    public void entityJoinLevelEvent(EntityJoinLevelEvent event) {
         // Initialize devices
         DEVICE_CONTROLLER.initDevices();
     }

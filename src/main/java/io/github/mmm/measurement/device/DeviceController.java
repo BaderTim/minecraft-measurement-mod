@@ -42,8 +42,6 @@ public class DeviceController {
     private IMUController imuController;
     private IMU imu1;
 
-    private LocalPlayer player = Minecraft.getInstance().player;
-    private ClientLevel level = Minecraft.getInstance().level;
 
     public DeviceController() {
         System.out.println("Measure constructor");
@@ -74,7 +72,7 @@ public class DeviceController {
         if(Config.LIDAR3_SWITCH.get()) this.saveStringToFile("timestamp;data\n", "lidar3.csv");
         if(Config.IMU1_SWITCH.get()) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ\n", "imu1.csv");
 
-        player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
+        Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
         this.currentlyMeasuring = true;
     }
 
@@ -101,6 +99,8 @@ public class DeviceController {
     }
 
     private void initLidars() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        ClientLevel level = Minecraft.getInstance().level;
         if (Config.LIDAR1_SWITCH.get()) {
             this.lidar1 = new LiDAR(
                     (float)Config.LIDAR1_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
@@ -115,6 +115,8 @@ public class DeviceController {
                     player,
                     level
             );
+        } else {
+            this.lidar1 = null;
         }
         if (Config.LIDAR2_SWITCH.get()) {
             this.lidar2 = new LiDAR(
@@ -130,6 +132,8 @@ public class DeviceController {
                     player,
                     level
             );
+        } else {
+            this.lidar2 = null;
         }
         if (Config.LIDAR3_SWITCH.get()) {
             this.lidar3 = new LiDAR(
@@ -145,6 +149,8 @@ public class DeviceController {
                     player,
                     level
             );
+        } else {
+            this.lidar3 = null;
         }
     }
 
@@ -157,6 +163,8 @@ public class DeviceController {
                     Config.IMU1_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.IMU1_MEAUREMENT_FREQUENCY_IN_HZ.get()
             );
+        } else {
+            this.imu1 = null;
         }
     }
 
