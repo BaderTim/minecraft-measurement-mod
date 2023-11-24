@@ -13,6 +13,7 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import static io.github.mmm.MMM.LOGGER;
+import static io.github.mmm.MMM.MEASUREMENT_CONTROLLER;
 import static net.minecraft.util.CommonColors.GRAY;
 import static net.minecraft.util.CommonColors.WHITE;
 
@@ -371,6 +372,8 @@ public class ConfigGUI extends Screen {
         saveRadius(Config.LIDAR3_PITCH_OFFSET_FROM_POV_IN_DEG, Lidar3PitchOffsetEditBox);
         saveRadius(Config.LIDAR3_ROLL_OFFSET_FROM_POV_IN_DEG, Lidar3RollOffsetEditBox);
         saveDistanceOrDensity(Config.LIDAR3_MAXIMUM_MEASUREMENT_DISTANCE, Lidar3MaxMeasurementDistanceEditBox);
+
+        MEASUREMENT_CONTROLLER.initDevices();
 
         Minecraft.getInstance().player.displayClientMessage(
                 Component.translatable("chat." + MMM.MODID + ".gui.save.success"),

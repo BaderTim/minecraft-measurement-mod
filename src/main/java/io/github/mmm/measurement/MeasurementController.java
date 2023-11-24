@@ -42,6 +42,9 @@ public class MeasurementController {
     private IMUController imuController;
     private IMU imu1;
 
+    private LocalPlayer player = Minecraft.getInstance().player;
+    private ClientLevel level = Minecraft.getInstance().level;
+
     public MeasurementController() {
         System.out.println("Measure constructor");
         this.currentlyMeasuring = false;
@@ -61,10 +64,49 @@ public class MeasurementController {
         this.saveInterval = Config.SAVE_INTERVAL.get();
         this.tickTimeWarning = Config.TICK_TIME_WARNING.get();
         this.tickTimeWarningTolerance = Config.TICK_TIME_WARNING_TOLERANCE.get();
-        LocalPlayer player = Minecraft.getInstance().player;
-        ClientLevel level = Minecraft.getInstance().level;
-        assert player != null;
-        assert level != null;
+        this.lidarController = new LiDARController(new LiDAR[]{lidar1, lidar2, lidar3});
+        this.imuController = new IMUController(imu1);
+
+        this.startTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
+        try {
+            Files.createDirectories(Paths.get(this.FILE_PATH+this.startTime));
+        } catch (Exception e) {
+            System.out.println("Error creating directory: " + e.getMessage());
+        }
+
+        if(Config.LIDAR1_SWITCH.get()) this.saveStringToFile("timestamp;data\n", "lidar1.csv");
+        if(Config.LIDAR2_SWITCH.get()) this.saveStringToFile("timestamp;data\n", "lidar2.csv");
+        if(Config.LIDAR3_SWITCH.get()) this.saveStringToFile("timestamp;data\n", "lidar3.csv");
+        if(Config.IMU1_SWITCH.get()) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ\n", "imu1.csv");
+
+        player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
+        this.currentlyMeasuring = true;
+    }
+
+    public void stopMeasure() {
+        // save remaining scans
+        ArrayList<LidarScan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
+        for (int i = 0; i < scans.length; i++) {
+            MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
+        }
+        MEASUREMENT_CONTROLLER.getLidarController().clearScans();
+        ArrayList<ImuScan> imuScans = MEASUREMENT_CONTROLLER.getImuController().getScans();
+        MEASUREMENT_CONTROLLER.saveIMUScansToFile(imuScans, "imu1.csv");
+        // send stop message
+        Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.stop"), false);
+        // reset
+        this.currentlyMeasuring = false;
+        this.lidarController = null;
+        this.imuController = null;
+        this.startTime = null;
+    }
+
+    public void initDevices() {
+        this.initLidars();
+        this.initImus();
+    }
+
+    private void initLidars() {
         if (Config.LIDAR1_SWITCH.get()) {
             this.lidar1 = new LiDAR(
                     (float)Config.LIDAR1_HORIZONTAL_SCANNING_RADIUS_IN_DEG.get(),
@@ -110,7 +152,9 @@ public class MeasurementController {
                     level
             );
         }
-        this.lidarController = new LiDARController(new LiDAR[]{lidar1, lidar2, lidar3});
+    }
+
+    private void initImus() {
         if (Config.IMU1_SWITCH.get()) {
             this.imu1 = new IMU(
                     Config.IMU1_CONSIDER_GRAVITY.get(),
@@ -120,44 +164,6 @@ public class MeasurementController {
                     Config.IMU1_MEAUREMENT_FREQUENCY_IN_HZ.get()
             );
         }
-        this.imuController = new IMUController(imu1);
-
-        this.startTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
-        try {
-            Files.createDirectories(Paths.get(this.FILE_PATH+this.startTime));
-        } catch (Exception e) {
-            System.out.println("Error creating directory: " + e.getMessage());
-        }
-
-        if(lidar1 != null) this.saveStringToFile("timestamp;data\n", "lidar1.csv");
-        if(lidar2 != null) this.saveStringToFile("timestamp;data\n", "lidar2.csv");
-        if(lidar3 != null) this.saveStringToFile("timestamp;data\n", "lidar3.csv");
-        if(imu1 != null) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ\n", "imu1.csv");
-
-        player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
-        this.currentlyMeasuring = true;
-    }
-
-    public void stopMeasure() {
-        // save remaining scans
-        ArrayList<LidarScan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
-        for (int i = 0; i < scans.length; i++) {
-            MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
-        }
-        MEASUREMENT_CONTROLLER.getLidarController().clearScans();
-        ArrayList<ImuScan> imuScans = MEASUREMENT_CONTROLLER.getImuController().getScans();
-        MEASUREMENT_CONTROLLER.saveIMUScansToFile(imuScans, "imu1.csv");
-        // send stop message
-        Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.stop"), false);
-        // reset
-        this.currentlyMeasuring = false;
-        this.lidar1 = null;
-        this.lidar2 = null;
-        this.lidar3 = null;
-        this.lidarController = null;
-        this.imu1 = null;
-        this.imuController = null;
-        this.startTime = null;
     }
 
     public void saveLiDARScansToFile(ArrayList<LidarScan> scans, String fileName) {
