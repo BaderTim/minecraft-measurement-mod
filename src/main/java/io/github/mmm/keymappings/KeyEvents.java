@@ -1,6 +1,8 @@
 package io.github.mmm.keymappings;
 
-import io.github.mmm.modconfig.gui.ConfigGUI;
+import io.github.mmm.MMM;
+import io.github.mmm.modconfig.gui.DeviceConfigGUI;
+import io.github.mmm.modconfig.gui.SurveyConfigGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -27,7 +29,11 @@ public class KeyEvents {
                 }
             } else if (SETTINGS_MAPPING.get().consumeClick()) {
                 LOGGER.info("SETTINGS_MAPPING is pressed");
-                Minecraft.getInstance().setScreen(new ConfigGUI());
+                if(latestConfigGUI == ConfigGUIType.DEVICE) {
+                    Minecraft.getInstance().setScreen(new DeviceConfigGUI());
+                } else if(latestConfigGUI == ConfigGUIType.SURVEY) {
+                    Minecraft.getInstance().setScreen(new SurveyConfigGUI());
+                }
             } else if (VISUALIZE_MAPPING.get().consumeClick()) {
                 LOGGER.info("VISUALIZE_MAPPING is pressed");
             }

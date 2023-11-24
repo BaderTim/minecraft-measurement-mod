@@ -9,13 +9,18 @@
 
   "gui.mmm.controls.category.measurement": "Measurement",
   "gui.mmm.controls.measure": "Start/Stop Measuring",
-  "gui.mmm.controls.settings": "Open Measurement Settings",
+  "gui.mmm.controls.settings": "Open MMM Settings",
   "gui.mmm.controls.visualize": "Visualize Devices",
 
-  "gui.mmm.settings.title": "Minecraft Measurement Mod Settings",
+  "gui.mmm.settings.survey.title": "MMM Survey Settings",
+  "gui.mmm.settings.survey.name": "Switch to Survey Settings",
+  "gui.mmm.settings.survey.tooltip": "Switch to the survey settings menu.",
+  "gui.mmm.settings.device.title": "MMM Device Settings",
+  "gui.mmm.settings.device.name": "Switch to Device Settings",
+  "gui.mmm.settings.device.tooltip": "Switch to the device settings menu.",
 
   "gui.mmm.settings.exit.name": "Save & Exit",
-  "gui.mmm.settings.exit.tooltip": "Save the current measurment settings and exit the menu.",
+  "gui.mmm.settings.exit.tooltip": "Save the current measurement settings and exit the menu.",
 
   "gui.mmm.settings.switch.active": "§aactive",
   "gui.mmm.settings.switch.inactive": "§cinactive",

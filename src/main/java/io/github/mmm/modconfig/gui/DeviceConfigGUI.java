@@ -17,17 +17,22 @@ import static io.github.mmm.MMM.MEASUREMENT_CONTROLLER;
 import static net.minecraft.util.CommonColors.GRAY;
 import static net.minecraft.util.CommonColors.WHITE;
 
-public class ConfigGUI extends Screen {
+public class DeviceConfigGUI extends Screen {
 
     private static final int[] validFrequencies = new int[]{1, 2, 4, 5, 10, 20};
 
     // title
-    private static final Component TITLE = Component.translatable("gui." + MMM.MODID + ".settings.title");
+    private static final Component TITLE = Component.translatable("gui." + MMM.MODID + ".settings.device.title");
 
     // save
     private static final Component EXIT = Component.translatable("gui." + MMM.MODID + ".settings.exit.name");
     private static Button ExitButton;
     private static final Component EXIT_BUTTON_TOOLTIP = Component.translatable("gui." + MMM.MODID + ".settings.exit.tooltip");
+
+    // open different survey config
+    private static final Component SURVEY = Component.translatable("gui." + MMM.MODID + ".settings.survey.name");
+    private static Button SurveyButton;
+    private static final Component SURVEY_BUTTON_TOOLTIP = Component.translatable("gui." + MMM.MODID + ".settings.survey.tooltip");
 
     // switch button
     private static final Component SWITCH_ACTIVE = Component.translatable("gui." + MMM.MODID + ".settings.switch.active");
@@ -90,7 +95,7 @@ public class ConfigGUI extends Screen {
     private static final Component SAVEPATH = Component.translatable("gui." + MMM.MODID + ".settings.savepath");
 
 
-    public ConfigGUI() {
+    public DeviceConfigGUI() {
         // Use the super class' constructor to set the screen's title
         super(TITLE);
     }
@@ -99,9 +104,16 @@ public class ConfigGUI extends Screen {
     protected void init() {
         super.init();
 
+        // survey
+        SurveyButton = Button.builder(SURVEY, this::handleSurveyButtonPress)
+                .bounds(10, 10, 140, 20)
+                .tooltip(Tooltip.create(SURVEY_BUTTON_TOOLTIP))
+                .build();
+        addRenderableWidget(SurveyButton);
+
         // exit
         ExitButton = Button.builder(EXIT, this::handleExitButtonPress)
-                .bounds(this.width-100-10, 10, 100, 20)
+                .bounds(this.width-140-10, 10, 140, 20)
                 .tooltip(Tooltip.create(EXIT_BUTTON_TOOLTIP))
                 .build();
         addRenderableWidget(ExitButton);
@@ -299,6 +311,11 @@ public class ConfigGUI extends Screen {
         addRenderableWidget(IMU1FrequencyButton);
     }
 
+    private void handleSurveyButtonPress(Button button) {
+        this.onClose();
+        Minecraft.getInstance().setScreen(new SurveyConfigGUI());
+    }
+
     private Component getSwitchState(boolean state) {
         return state ? SWITCH_ACTIVE : SWITCH_INACTIVE;
     }
@@ -315,7 +332,7 @@ public class ConfigGUI extends Screen {
         super.render(graphics, mouseX, mouseY, partialTick);
 
         // title
-        graphics.drawCenteredString(this.font, TITLE, this.width/2, 20, WHITE);
+        graphics.drawCenteredString(this.font, TITLE, this.width/2, 17, WHITE);
 
         // lidar
         graphics.drawString(this.font, LIDAR, 10, 45, WHITE);
@@ -379,6 +396,7 @@ public class ConfigGUI extends Screen {
                 Component.translatable("chat." + MMM.MODID + ".gui.save.success"),
                 false
         );
+        MMM.latestConfigGUI = MMM.ConfigGUIType.DEVICE;
         // Call last in case it interferes with the override
         super.onClose();
     }

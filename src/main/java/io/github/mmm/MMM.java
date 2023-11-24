@@ -22,6 +22,12 @@ public class MMM {
     public static final Logger LOGGER = LogUtils.getLogger();
     // Create Measure object
     public static final MeasurementController MEASUREMENT_CONTROLLER = new MeasurementController();
+    // Always start with the device config gui
+    public static ConfigGUIType latestConfigGUI = ConfigGUIType.DEVICE;
+    public static enum ConfigGUIType {
+        SURVEY,
+        DEVICE
+    };
 
     public MMM() {
         // Register Config
