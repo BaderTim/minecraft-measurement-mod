@@ -35,9 +35,9 @@
   "gui.mmm.settings.lidar.offset": "Yaw, Pitch & Roll",
   "gui.mmm.settings.lidar.range": "Range",
 
-  "gui.mmm.settings.lidar.lidar1.name": "lidar1",
-  "gui.mmm.settings.lidar.lidar2.name": "lidar2",
-  "gui.mmm.settings.lidar.lidar3.name": "lidar3",
+  "gui.mmm.settings.lidar.lidar1.name": "§5lidar1",
+  "gui.mmm.settings.lidar.lidar2.name": "§6lidar2",
+  "gui.mmm.settings.lidar.lidar3.name": "§3lidar3",
 
   "gui.mmm.settings.imu.title": "Inertial Measurement Unit",
   "gui.mmm.settings.imu.imu1.name": "imu1",
