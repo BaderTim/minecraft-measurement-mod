@@ -14,7 +14,9 @@ public class KeyRegistry {
     @SubscribeEvent
     public static void registerBindings(RegisterKeyMappingsEvent event) {
         event.register(SETTINGS_MAPPING.get());
-        event.register(MEASURE_MAPPING.get());
         event.register(VISUALIZE_MAPPING.get());
+        event.register(DEVICE_MEASURE_MAPPING.get());
+        event.register(SURVEY_MODE_MAPPING.get());
+        event.register(SURVEY_MEASURE_MAPPING.get());
     }
 }

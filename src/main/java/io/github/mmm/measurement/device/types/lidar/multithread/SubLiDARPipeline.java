@@ -1,7 +1,7 @@
-package io.github.mmm.measurement.devices.lidar.multithread;
+package io.github.mmm.measurement.device.types.lidar.multithread;
 
-import io.github.mmm.measurement.devices.lidar.LiDAR;
-import io.github.mmm.measurement.objects.LidarScan;
+import io.github.mmm.measurement.device.types.lidar.LiDAR;
+import io.github.mmm.measurement.device.objects.LidarScan;
 
 public class SubLiDARPipeline implements Runnable {
 

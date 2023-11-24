@@ -1,13 +1,13 @@
-package io.github.mmm.measurement;
+package io.github.mmm.measurement.device;
 
 import io.github.mmm.MMM;
-import io.github.mmm.measurement.devices.imu.IMU;
-import io.github.mmm.measurement.devices.imu.IMUController;
-import io.github.mmm.measurement.devices.lidar.LiDAR;
-import io.github.mmm.measurement.devices.lidar.LiDARController;
-import io.github.mmm.measurement.objects.ImuScan;
-import io.github.mmm.measurement.objects.LidarScan;
-import io.github.mmm.measurement.objects.LidarScan2D;
+import io.github.mmm.measurement.device.types.imu.IMU;
+import io.github.mmm.measurement.device.types.imu.IMUController;
+import io.github.mmm.measurement.device.types.lidar.LiDAR;
+import io.github.mmm.measurement.device.types.lidar.LiDARController;
+import io.github.mmm.measurement.device.objects.ImuScan;
+import io.github.mmm.measurement.device.objects.LidarScan;
+import io.github.mmm.measurement.device.objects.LidarScan2D;
 import io.github.mmm.modconfig.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -21,9 +21,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import static io.github.mmm.MMM.MEASUREMENT_CONTROLLER;
+import static io.github.mmm.MMM.DEVICE_CONTROLLER;
 
-public class MeasurementController {
+public class DeviceController {
 
     private Boolean currentlyMeasuring;
     private int saveInterval;
@@ -45,7 +45,7 @@ public class MeasurementController {
     private LocalPlayer player = Minecraft.getInstance().player;
     private ClientLevel level = Minecraft.getInstance().level;
 
-    public MeasurementController() {
+    public DeviceController() {
         System.out.println("Measure constructor");
         this.currentlyMeasuring = false;
         try {
@@ -85,13 +85,13 @@ public class MeasurementController {
 
     public void stopMeasure() {
         // save remaining scans
-        ArrayList<LidarScan>[] scans = MEASUREMENT_CONTROLLER.getLidarController().getScans();
+        ArrayList<LidarScan>[] scans = DEVICE_CONTROLLER.getLidarController().getScans();
         for (int i = 0; i < scans.length; i++) {
-            MEASUREMENT_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
+            DEVICE_CONTROLLER.saveLiDARScansToFile(scans[i], "lidar" + (i + 1) + ".csv");
         }
-        MEASUREMENT_CONTROLLER.getLidarController().clearScans();
-        ArrayList<ImuScan> imuScans = MEASUREMENT_CONTROLLER.getImuController().getScans();
-        MEASUREMENT_CONTROLLER.saveIMUScansToFile(imuScans, "imu1.csv");
+        DEVICE_CONTROLLER.getLidarController().clearScans();
+        ArrayList<ImuScan> imuScans = DEVICE_CONTROLLER.getImuController().getScans();
+        DEVICE_CONTROLLER.saveIMUScansToFile(imuScans, "imu1.csv");
         // send stop message
         Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.stop"), false);
         // reset

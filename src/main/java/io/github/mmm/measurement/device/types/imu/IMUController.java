@@ -1,11 +1,11 @@
-package io.github.mmm.measurement.devices.imu;
+package io.github.mmm.measurement.device.types.imu;
 
-import io.github.mmm.measurement.objects.ImuScan;
+import io.github.mmm.measurement.device.objects.ImuScan;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
-import static io.github.mmm.MMM.MEASUREMENT_CONTROLLER;
+import static io.github.mmm.MMM.DEVICE_CONTROLLER;
 
 public class IMUController {
 
@@ -40,7 +40,7 @@ public class IMUController {
     }
 
     private boolean isImuAllowedToScan() {
-        return imu != null && passedTicks % MEASUREMENT_CONTROLLER.getFrequencyInTicks(imu.getFrequency()) == 0;
+        return imu != null && passedTicks % DEVICE_CONTROLLER.getFrequencyInTicks(imu.getFrequency()) == 0;
     }
 
     public ArrayList<ImuScan> getScans() {

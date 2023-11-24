@@ -1,7 +1,6 @@
-package io.github.mmm.measurement;
+package io.github.mmm.measurement.device;
 
 import io.github.mmm.MMM;
-import io.github.mmm.modconfig.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +21,7 @@ public class TickObserver {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if(!MEASUREMENT_CONTROLLER.isTickTimeWarning()) return;
+        if(!DEVICE_CONTROLLER.isTickTimeWarning()) return;
         Player player = Minecraft.getInstance().player;
         if (event.phase == TickEvent.Phase.END && player != null) {
             long currentTime = System.currentTimeMillis();
@@ -30,7 +29,7 @@ public class TickObserver {
                 lastTickTime = currentTime;
                 return;
             }
-            if (MEASUREMENT_CONTROLLER.isCurrentlyMeasuring() && (currentTime - lastTickTime - 1000/TICKS_PER_SECOND - MEASUREMENT_CONTROLLER.getTickTimeWarningTolerance()) > 0) {
+            if (DEVICE_CONTROLLER.isCurrentlyMeasuring() && (currentTime - lastTickTime - 1000/TICKS_PER_SECOND - DEVICE_CONTROLLER.getTickTimeWarningTolerance()) > 0) {
                 if (tickCount > messageTimeoutInTicks) {
                     player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".warning.tickrate"), false);
                     LOGGER.warn("Tick time took too long: " + (currentTime - lastTickTime) + "ms");

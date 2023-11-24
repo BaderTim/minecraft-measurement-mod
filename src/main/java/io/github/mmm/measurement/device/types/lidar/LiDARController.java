@@ -1,14 +1,14 @@
-package io.github.mmm.measurement.devices.lidar;
+package io.github.mmm.measurement.device.types.lidar;
 
-import io.github.mmm.measurement.devices.lidar.multithread.SubLiDARPipeline;
-import io.github.mmm.measurement.objects.LidarScan;
-import io.github.mmm.measurement.objects.LidarScan2D;
-import io.github.mmm.measurement.objects.LidarScan3D;
+import io.github.mmm.measurement.device.types.lidar.multithread.SubLiDARPipeline;
+import io.github.mmm.measurement.device.objects.LidarScan;
+import io.github.mmm.measurement.device.objects.LidarScan2D;
+import io.github.mmm.measurement.device.objects.LidarScan3D;
 import io.github.mmm.modconfig.Config;
 
 import java.util.ArrayList;
 
-import static io.github.mmm.MMM.MEASUREMENT_CONTROLLER;
+import static io.github.mmm.MMM.DEVICE_CONTROLLER;
 
 public class LiDARController {
 
@@ -227,7 +227,7 @@ public class LiDARController {
     }
 
     private boolean isLidarAllowedToScan(LiDAR lidar) {
-        return lidar != null && this.passedTicks % MEASUREMENT_CONTROLLER.getFrequencyInTicks(lidar.getFrequency()) == 0;
+        return lidar != null && this.passedTicks % DEVICE_CONTROLLER.getFrequencyInTicks(lidar.getFrequency()) == 0;
     }
 
 }

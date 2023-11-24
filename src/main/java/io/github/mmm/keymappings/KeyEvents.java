@@ -1,6 +1,5 @@
 package io.github.mmm.keymappings;
 
-import io.github.mmm.MMM;
 import io.github.mmm.modconfig.gui.DeviceConfigGUI;
 import io.github.mmm.modconfig.gui.SurveyConfigGUI;
 import net.minecraft.client.Minecraft;
@@ -20,12 +19,12 @@ public class KeyEvents {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         // Only call code once as the tick event is called twice every tick
         if (event.phase == TickEvent.Phase.END) {
-            if (MEASURE_MAPPING.get().consumeClick()) {
+            if (DEVICE_MEASURE_MAPPING.get().consumeClick()) {
                 LOGGER.info("MEASURE_START_STOP_MAPPING is pressed");
-                if (MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
-                    MEASUREMENT_CONTROLLER.stopMeasure();
+                if (DEVICE_CONTROLLER.isCurrentlyMeasuring()) {
+                    DEVICE_CONTROLLER.stopMeasure();
                 } else {
-                    MEASUREMENT_CONTROLLER.startMeasure();
+                    DEVICE_CONTROLLER.startMeasure();
                 }
             } else if (SETTINGS_MAPPING.get().consumeClick()) {
                 LOGGER.info("SETTINGS_MAPPING is pressed");
@@ -36,6 +35,10 @@ public class KeyEvents {
                 }
             } else if (VISUALIZE_MAPPING.get().consumeClick()) {
                 LOGGER.info("VISUALIZE_MAPPING is pressed");
+            } else if (SURVEY_MODE_MAPPING.get().consumeClick()) {
+                LOGGER.info("SURVEY_MODE_MAPPING is pressed");
+            } else if (SURVEY_MEASURE_MAPPING.get().consumeClick()) {
+                LOGGER.info("SURVEY_MEASURE_MAPPING is pressed");
             }
         }
     }

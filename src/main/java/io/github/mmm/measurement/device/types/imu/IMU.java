@@ -1,12 +1,9 @@
-package io.github.mmm.measurement.devices.imu;
+package io.github.mmm.measurement.device.types.imu;
 
-import io.github.mmm.measurement.objects.ImuScan;
+import io.github.mmm.measurement.device.objects.ImuScan;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class IMU {
 

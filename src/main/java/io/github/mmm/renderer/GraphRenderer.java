@@ -1,6 +1,5 @@
 package io.github.mmm.renderer;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -11,7 +10,7 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static io.github.mmm.MMM.MEASUREMENT_CONTROLLER;
+import static io.github.mmm.MMM.DEVICE_CONTROLLER;
 import static io.github.mmm.MMM.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -20,7 +19,7 @@ public class GraphRenderer {
     @SubscribeEvent
     public static void onRenderLayerPost(RenderLevelStageEvent event) {
 
-        if(MEASUREMENT_CONTROLLER.isCurrentlyMeasuring()) {
+        if(DEVICE_CONTROLLER.isCurrentlyMeasuring()) {
             Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
 
             RenderSystem.enableDepthTest();
