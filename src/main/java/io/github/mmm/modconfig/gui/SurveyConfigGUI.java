@@ -80,7 +80,7 @@ public class SurveyConfigGUI extends Screen {
                 Component.translatable("chat." + MMM.MODID + ".gui.save.success"),
                 false
         );
-        MMM.latestConfigGUI = MMM.ConfigGUIType.DEVICE;
+        MMM.latestConfigGUI = MMM.ConfigGUIType.SURVEY;
         super.onClose();
     }
 }
