@@ -32,7 +32,7 @@ public class KeyEvents {
             } else if (SETTINGS_MAPPING.get().consumeClick()) {
                 LOGGER.info("SETTINGS_MAPPING is pressed");
                 if(DEVICE_CONTROLLER.isCurrentlyMeasuring()) {
-                    Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".open.warn"), false);
+                    Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".gui.open.warn"), false);
                     return;
                 }
                 if(latestConfigGUI == ConfigGUIType.DEVICE) {
