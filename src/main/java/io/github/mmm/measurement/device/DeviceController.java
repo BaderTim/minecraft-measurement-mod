@@ -14,6 +14,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
+import java.awt.*;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -113,7 +114,8 @@ public class DeviceController {
                     (float)Config.LIDAR1_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR1_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
-                    level
+                    level,
+                    new Color(170, 0, 170)
             );
         } else {
             this.lidar1 = null;
@@ -130,7 +132,8 @@ public class DeviceController {
                     (float)Config.LIDAR2_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR2_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
-                    level
+                    level,
+                    new Color(255, 170, 0)
             );
         } else {
             this.lidar2 = null;
@@ -147,7 +150,8 @@ public class DeviceController {
                     (float)Config.LIDAR3_MAXIMUM_MEASUREMENT_DISTANCE.get(),
                     Config.LIDAR3_MEASUREMENT_FREQUENCY_IN_HZ.get(),
                     player,
-                    level
+                    level,
+                    new Color(0, 170, 170)
             );
         } else {
             this.lidar3 = null;

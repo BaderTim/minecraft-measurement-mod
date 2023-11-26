@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.Vec3;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -26,6 +27,8 @@ public class LiDAR {
     private Player player;
     private ClientLevel level;
 
+    private final Color color;
+
     // 2D
     public LiDAR(
             float horizontalScanRadiusInDeg,
@@ -35,7 +38,8 @@ public class LiDAR {
             float rollFromPOVInDeg,
             float maximumMeasurementDistanceInMeters,
             Player player,
-            ClientLevel level
+            ClientLevel level,
+            Color color
     ) {
         this.verticalScanRadiusInDeg = 0;
         this.verticalScansPerRadius = 0;
@@ -48,6 +52,7 @@ public class LiDAR {
         this.frequency = 1;
         this.player = player;
         this.level = level;
+        this.color = color;
     }
     public LiDAR(
             float horizontalScanRadiusInDeg,
@@ -58,7 +63,8 @@ public class LiDAR {
             float maximumMeasurementDistanceInMeters,
             int frequency,
             Player player,
-            ClientLevel level
+            ClientLevel level,
+            Color color
     ) {
         this.verticalScanRadiusInDeg = 0;
         this.verticalScansPerRadius = 0;
@@ -71,6 +77,7 @@ public class LiDAR {
         this.frequency = frequency;
         this.player = player;
         this.level = level;
+        this.color = color;
     }
 
     // 3D
@@ -84,7 +91,8 @@ public class LiDAR {
             float rollFromPOVInDeg,
             float maximumMeasurementDistanceInMeters,
             Player player,
-            ClientLevel level
+            ClientLevel level,
+            Color color
     ) {
         this.horizontalScanRadiusInDeg = horizontalScanRadiusInDeg;
         this.verticalScanRadiusInDeg = verticalScanRadiusInDeg;
@@ -97,6 +105,7 @@ public class LiDAR {
         this.frequency = 1;
         this.player = player;
         this.level = level;
+        this.color = color;
     }
     public LiDAR(
             float horizontalScanRadiusInDeg,
@@ -109,7 +118,8 @@ public class LiDAR {
             float maximumMeasurementDistanceInMeters,
             int frequency,
             Player player,
-            ClientLevel level
+            ClientLevel level,
+            Color color
     ) {
         this.horizontalScanRadiusInDeg = horizontalScanRadiusInDeg;
         this.verticalScanRadiusInDeg = verticalScanRadiusInDeg;
@@ -122,6 +132,7 @@ public class LiDAR {
         this.frequency = frequency;
         this.player = player;
         this.level = level;
+        this.color = color;
     }
 
     public LidarScan scanFromPOVToBlocks() {
@@ -247,4 +258,7 @@ public class LiDAR {
         return frequency;
     }
 
+    public Color getColor() {
+        return color;
+    }
 }

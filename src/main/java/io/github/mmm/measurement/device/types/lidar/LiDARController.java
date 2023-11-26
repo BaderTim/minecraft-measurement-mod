@@ -181,7 +181,8 @@ public class LiDARController {
                     lidar3d.getRollFromPOVInDeg(),
                     lidar3d.getMaximumMeasurementDistanceInMeters(),
                     lidar3d.getPlayer(),
-                    lidar3d.getLevel()
+                    lidar3d.getLevel(),
+                    null
             ));
         }
         return subLidars;

@@ -12,9 +12,10 @@ import net.minecraftforge.fml.common.Mod;
 
 import static io.github.mmm.MMM.*;
 import static io.github.mmm.keymappings.KeyDefinitions.*;
+import static io.github.mmm.renderer.RenderEventHandler.DEVICE_RENDERER;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class KeyEvents {
+public class KeyEventHandler {
 
     // Listen to Key Bindings
     @SubscribeEvent
@@ -43,6 +44,11 @@ public class KeyEvents {
 
             } else if (VISUALIZE_MAPPING.get().consumeClick()) {
                 LOGGER.info("VISUALIZE_MAPPING is pressed");
+                if (DEVICE_RENDERER.isVisualizing()) {
+                    DEVICE_RENDERER.stopVisualize();
+                } else {
+                    DEVICE_RENDERER.startVisualize();
+                }
 
             } else if (SURVEY_MODE_MAPPING.get().consumeClick()) {
                 LOGGER.info("SURVEY_MODE_MAPPING is pressed");
