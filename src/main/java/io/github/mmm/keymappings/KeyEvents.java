@@ -1,8 +1,10 @@
 package io.github.mmm.keymappings;
 
+import io.github.mmm.MMM;
 import io.github.mmm.modconfig.gui.DeviceConfigGUI;
 import io.github.mmm.modconfig.gui.SurveyConfigGUI;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,17 +28,25 @@ public class KeyEvents {
                 } else {
                     DEVICE_CONTROLLER.startMeasure();
                 }
+
             } else if (SETTINGS_MAPPING.get().consumeClick()) {
                 LOGGER.info("SETTINGS_MAPPING is pressed");
+                if(DEVICE_CONTROLLER.isCurrentlyMeasuring()) {
+                    Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".open.warn"), false);
+                    return;
+                }
                 if(latestConfigGUI == ConfigGUIType.DEVICE) {
                     Minecraft.getInstance().setScreen(new DeviceConfigGUI());
                 } else if(latestConfigGUI == ConfigGUIType.SURVEY) {
                     Minecraft.getInstance().setScreen(new SurveyConfigGUI());
                 }
+
             } else if (VISUALIZE_MAPPING.get().consumeClick()) {
                 LOGGER.info("VISUALIZE_MAPPING is pressed");
+
             } else if (SURVEY_MODE_MAPPING.get().consumeClick()) {
                 LOGGER.info("SURVEY_MODE_MAPPING is pressed");
+
             } else if (SURVEY_MEASURE_MAPPING.get().consumeClick()) {
                 LOGGER.info("SURVEY_MEASURE_MAPPING is pressed");
             }

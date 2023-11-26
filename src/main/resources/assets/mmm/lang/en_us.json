@@ -7,6 +7,8 @@
   "chat.mmm.gui.save.success": "§7[MMM] Saved config.",
   "chat.mmm.gui.save.warn": "§7[MMM] A config entry was invalid and has been changed back.",
 
+  "chat.mmm.gui.open.warn": "§7[MMM] Cannot open GUI while measuring.",
+
   "gui.mmm.controls.category.measurement": "Measurement",
   "gui.mmm.controls.settings": "MMM Settings",
   "gui.mmm.controls.visualize": "Device Visualization",
