@@ -312,7 +312,7 @@ public class DeviceConfigGUI extends Screen {
     }
 
     private void handleSurveyButtonPress(Button button) {
-        this.onClose();
+        this.close();
         Minecraft.getInstance().setScreen(new SurveyConfigGUI());
     }
 
@@ -362,6 +362,14 @@ public class DeviceConfigGUI extends Screen {
 
     @Override
     public void onClose() {
+        Minecraft.getInstance().player.displayClientMessage(
+                Component.translatable("chat." + MMM.MODID + ".gui.save.success"),
+                false
+        );
+        this.close();
+    }
+
+    public void close() {
         // save config
         saveRadius(Config.LIDAR1_HORIZONTAL_SCANNING_RADIUS_IN_DEG, Lidar1HorizontalScanRadiusEditBox);
         saveDistanceOrDensity(Config.LIDAR1_HORIZONTAL_SCANS_PER_RADIUS, Lidar1HorizontalScansPerRadiusEditBox);
@@ -392,10 +400,6 @@ public class DeviceConfigGUI extends Screen {
 
         DEVICE_CONTROLLER.initDevices();
 
-        Minecraft.getInstance().player.displayClientMessage(
-                Component.translatable("chat." + MMM.MODID + ".gui.save.success"),
-                false
-        );
         MMM.latestConfigGUI = MMM.ConfigGUIType.DEVICE;
         // Call last in case it interferes with the override
         super.onClose();

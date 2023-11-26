@@ -54,7 +54,7 @@ public class SurveyConfigGUI extends Screen {
     }
 
     private void handleDeviceButtonPress(Button button) {
-        this.onClose();
+        this.close();
         Minecraft.getInstance().setScreen(new DeviceConfigGUI());
     }
 
@@ -80,6 +80,10 @@ public class SurveyConfigGUI extends Screen {
                 Component.translatable("chat." + MMM.MODID + ".gui.save.success"),
                 false
         );
+        this.close();
+    }
+
+    private void close() {
         MMM.latestConfigGUI = MMM.ConfigGUIType.SURVEY;
         super.onClose();
     }
