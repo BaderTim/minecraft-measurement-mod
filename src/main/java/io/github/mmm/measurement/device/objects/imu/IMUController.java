@@ -1,6 +1,6 @@
-package io.github.mmm.measurement.device.types.imu;
+package io.github.mmm.measurement.device.objects.imu;
 
-import io.github.mmm.measurement.device.objects.ImuScan;
+import io.github.mmm.measurement.device.scans.ImuScan;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;

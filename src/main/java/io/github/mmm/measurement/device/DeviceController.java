@@ -1,13 +1,13 @@
 package io.github.mmm.measurement.device;
 
 import io.github.mmm.MMM;
-import io.github.mmm.measurement.device.types.imu.IMU;
-import io.github.mmm.measurement.device.types.imu.IMUController;
-import io.github.mmm.measurement.device.types.lidar.LiDAR;
-import io.github.mmm.measurement.device.types.lidar.LiDARController;
-import io.github.mmm.measurement.device.objects.ImuScan;
-import io.github.mmm.measurement.device.objects.LidarScan;
-import io.github.mmm.measurement.device.objects.LidarScan2D;
+import io.github.mmm.measurement.device.objects.imu.IMU;
+import io.github.mmm.measurement.device.objects.imu.IMUController;
+import io.github.mmm.measurement.device.objects.lidar.LiDAR;
+import io.github.mmm.measurement.device.objects.lidar.LiDARController;
+import io.github.mmm.measurement.device.scans.ImuScan;
+import io.github.mmm.measurement.device.scans.LidarScan;
+import io.github.mmm.measurement.device.scans.LidarScan2D;
 import io.github.mmm.modconfig.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

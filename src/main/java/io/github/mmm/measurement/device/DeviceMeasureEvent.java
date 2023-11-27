@@ -1,6 +1,6 @@
 package io.github.mmm.measurement.device;
 
-import io.github.mmm.measurement.device.objects.LidarScan;
+import io.github.mmm.measurement.device.scans.LidarScan;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;

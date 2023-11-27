@@ -1,8 +1,8 @@
-package io.github.mmm.measurement.device.types.lidar;
+package io.github.mmm.measurement.device.objects.lidar;
 
-import io.github.mmm.measurement.device.objects.LidarScan;
-import io.github.mmm.measurement.device.objects.LidarScan2D;
-import io.github.mmm.measurement.device.objects.LidarScan3D;
+import io.github.mmm.measurement.device.scans.LidarScan;
+import io.github.mmm.measurement.device.scans.LidarScan2D;
+import io.github.mmm.measurement.device.scans.LidarScan3D;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;

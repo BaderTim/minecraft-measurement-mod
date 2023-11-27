@@ -1,4 +1,4 @@
-package io.github.mmm.measurement.device.objects;
+package io.github.mmm.measurement.device.scans;
 
 public class LidarScan {
 
