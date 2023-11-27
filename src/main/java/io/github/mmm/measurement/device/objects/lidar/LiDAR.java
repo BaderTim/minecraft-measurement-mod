@@ -148,43 +148,24 @@ public class LiDAR {
     private LidarScan3D get3DScan() {
         float verticalScanAngleDifferenceInDeg = verticalScanRadiusInDeg / verticalScansPerRadius;
         float pitchFromPOVInDegOffset = pitchFromPOVInDeg + (verticalScanRadiusInDeg / 2); // start at the top of the scan
+        Vec3 globalStartPosition = getGlobalStartPosition();
+        Matrix3f localToGlobalMatrix = getLocalToGlobalMatrix();
         LidarScan3D scan3D = new LidarScan3D(horizontalScansPerRadius, verticalScansPerRadius);
         for(int i = 0; i < verticalScansPerRadius; i++) {
             float pitchFromPOVFor3DScanInDeg2D = pitchFromPOVInDegOffset - i * verticalScanAngleDifferenceInDeg;
-            LidarScan2D scan2D = this.get2DScan(pitchFromPOVFor3DScanInDeg2D);
+            LidarScan2D scan2D = this.get2DScan(pitchFromPOVFor3DScanInDeg2D, globalStartPosition, localToGlobalMatrix);
             scan3D.setScan2D(i, scan2D);
         }
         return scan3D;
     }
 
     private LidarScan2D get2DScan() {
-        return this.get2DScan(0);
+        return this.get2DScan(0, getGlobalStartPosition(), getLocalToGlobalMatrix());
     }
 
-    private LidarScan2D get2DScan(float extraPitchFromPOVInDeg) {
+    private LidarScan2D get2DScan(float extraPitchFromPOVInDeg, Vec3 globalStartPosition, Matrix3f localToGlobalMatrix) {
         float scanAngleDifferenceInDeg = horizontalScanRadiusInDeg / horizontalScansPerRadius;
         float yawFromPOVInDegOffset = yawFromPOVInDeg - (horizontalScanRadiusInDeg / 2); // start at the left side of the scan
-
-        // setup LOCAL coordinate system with GLOBAL pov coordinates
-        // LOCAL x1 x-axis is view vector
-        // LOCAL x3 y-axis is up vector
-        // LOCAL x2 z-axis is cross product of x-axis and y-axis
-        Vec3 localOrigin = player.getEyePosition();
-        Vec3 localXdirection = player.getViewVector(1.0F);
-        Vec3 localYdirection = player.getUpVector(1.0F);
-        Vec3 localZdirection = localXdirection.cross(localYdirection).normalize();
-
-        // Create a matrix representing the transformation from local to global coordinates
-        Matrix3f globalToLocalMatrix = new Matrix3f(
-                (float) localXdirection.x, (float) localYdirection.x, (float) localZdirection.x,
-                (float) localXdirection.y, (float) localYdirection.y, (float) localZdirection.y,
-                (float) localXdirection.z, (float) localYdirection.z, (float) localZdirection.z
-        );
-        Matrix3f localToGlobalMatrix = new Matrix3f();
-        globalToLocalMatrix.invert(localToGlobalMatrix);
-
-        // get the GLOBAL vector of the center of the player's head (0.2 thick) --> move position 'back' by 0.1
-        Vec3 globalStartPosition = localOrigin.add(localXdirection.yRot((float)Math.PI).scale(-0.1));
 
         LidarScan2D scan = new LidarScan2D(horizontalScansPerRadius);
         for(int i = 0; i < horizontalScansPerRadius; i++) {
@@ -221,6 +202,32 @@ public class LiDAR {
         Vec3 targetPosition = level.clip(context).getLocation();
         BigDecimal bd = new BigDecimal(startPos.distanceTo(targetPosition));
         return bd.setScale(3, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    public Matrix3f getLocalToGlobalMatrix() {
+        // setup LOCAL coordinate system with GLOBAL pov coordinates
+        // LOCAL x1 x-axis is view vector
+        // LOCAL x3 y-axis is up vector
+        // LOCAL x2 z-axis is cross product of x-axis and y-axis
+        Vec3 localXdirection = player.getViewVector(1.0F);
+        Vec3 localYdirection = player.getUpVector(1.0F);
+        Vec3 localZdirection = localXdirection.cross(localYdirection).normalize();
+
+        // Create a matrix representing the transformation from local to global coordinates
+        Matrix3f globalToLocalMatrix = new Matrix3f(
+                (float) localXdirection.x, (float) localYdirection.x, (float) localZdirection.x,
+                (float) localXdirection.y, (float) localYdirection.y, (float) localZdirection.y,
+                (float) localXdirection.z, (float) localYdirection.z, (float) localZdirection.z
+        );
+        Matrix3f localToGlobalMatrix = new Matrix3f();
+        globalToLocalMatrix.invert(localToGlobalMatrix);
+        return localToGlobalMatrix;
+    }
+
+    public Vec3 getGlobalStartPosition() {
+        Vec3 localOrigin = player.getEyePosition();
+        Vec3 localXdirection = player.getViewVector(1.0F);
+        return localOrigin.add(localXdirection.yRot((float)Math.PI).scale(-0.1));
     }
 
     public float getHorizontalScanRadiusInDeg() {

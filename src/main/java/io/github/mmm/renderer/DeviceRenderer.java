@@ -43,33 +43,12 @@ public class DeviceRenderer {
     }
 
     private void render2DLidar(LiDAR lidar) {
-        this.render2DLidar(lidar, 0);
+        this.render2DLidar(lidar, 0, lidar.getGlobalStartPosition(), lidar.getLocalToGlobalMatrix());
     }
 
-    private void render2DLidar(LiDAR lidar, float pitchFromPOVInDeg) {
+    private void render2DLidar(LiDAR lidar, float pitchFromPOVInDeg, Vec3 globalStartPosition, Matrix3f localToGlobalMatrix) {
         float scanAngleDifferenceInDeg = lidar.getHorizontalScanRadiusInDeg() / lidar.getHorizontalScansPerRadius();
         float yawFromPOVInDegOffset = lidar.getYawFromPOVInDeg() - (lidar.getHorizontalScanRadiusInDeg() / 2); // start at the left side of the scan#
-
-        // setup LOCAL coordinate system with GLOBAL pov coordinates
-        // LOCAL x1 x-axis is view vector
-        // LOCAL x3 y-axis is up vector
-        // LOCAL x2 z-axis is cross product of x-axis and y-axis
-        Vec3 localOrigin = lidar.getPlayer().getEyePosition();
-        Vec3 localXdirection = lidar.getPlayer().getViewVector(1.0F);
-        Vec3 localYdirection = lidar.getPlayer().getUpVector(1.0F);
-        Vec3 localZdirection = localXdirection.cross(localYdirection).normalize();
-
-        // Create a matrix representing the transformation from local to global coordinates
-        Matrix3f globalToLocalMatrix = new Matrix3f(
-                (float) localXdirection.x, (float) localYdirection.x, (float) localZdirection.x,
-                (float) localXdirection.y, (float) localYdirection.y, (float) localZdirection.y,
-                (float) localXdirection.z, (float) localYdirection.z, (float) localZdirection.z
-        );
-        Matrix3f localToGlobalMatrix = new Matrix3f();
-        globalToLocalMatrix.invert(localToGlobalMatrix);
-
-        // get the GLOBAL vector of the center of the player's head (0.2 thick) --> move position 'back' by 0.1
-        Vec3 globalStartPosition = localOrigin.add(localXdirection.yRot((float)Math.PI).scale(-0.1));
 
         for(int i = 0; i < lidar.getHorizontalScansPerRadius(); i++) {
 
@@ -98,10 +77,11 @@ public class DeviceRenderer {
     private void render3DLidar(LiDAR lidar) {
         float verticalScanAngleDifferenceInDeg = lidar.getVerticalScanRadiusInDeg() / lidar.getVerticalScansPerRadius();
         float pitchFromPOVInDegOffset = lidar.getPitchFromPOVInDeg() + (lidar.getVerticalScanRadiusInDeg() / 2); // start at the top of the scan
-
+        Vec3 globalStartPosition = lidar.getGlobalStartPosition();
+        Matrix3f localToGlobalMatrix = lidar.getLocalToGlobalMatrix();
         for(int i = 0; i < lidar.getVerticalScansPerRadius(); i++) {
             float pitchFromPOVFor3DScanInDeg2D = pitchFromPOVInDegOffset - i * verticalScanAngleDifferenceInDeg;
-            this.render2DLidar(lidar, pitchFromPOVFor3DScanInDeg2D);
+            this.render2DLidar(lidar, pitchFromPOVFor3DScanInDeg2D, globalStartPosition, localToGlobalMatrix);
         }
     }
 
