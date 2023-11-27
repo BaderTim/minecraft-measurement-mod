@@ -58,9 +58,9 @@ public class Config  {
         MULTITHREAD_SWITCH = BUILDER.comment("Activate/Deactivate Multithreading (active = true, inactive = false)")
                 .define("multithread_switch", true);
         THREAD_COUNT_MULTIPLIER = BUILDER.comment("Multiplier for the amount of Threads. Default is 1, resulting in 1*LOGICAL_CORES_AMOUNT Threads")
-                .define("thread_count_multiplier", 1);
+                .define("thread_count_multiplier", 4);
         SAVE_INTERVAL = BUILDER.comment("Interval in ticks (1 tick usually takes 50ms) in which the data is saved to the file")
-                .define("save_interval", 1);
+                .define("save_interval", 20*60*5); // 20 ticks * 60 seconds * 5 minutes = 5 minutes
         TICK_TIME_WARNING = BUILDER.comment("Activate/Deactivate Tick Time Warning (active = true, inactive = false)")
                 .define("tick_time_warning", false);
         TICK_TIME_WARNING_TOLERANCE = BUILDER.comment("Tolerance for the Tick Time Warning in MS. Default Tick Time is 50ms, this means a warning will appear when the Tick Time is longer than 50ms + tolerance.")
