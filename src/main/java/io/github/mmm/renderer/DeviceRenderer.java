@@ -2,15 +2,15 @@ package io.github.mmm.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import io.github.mmm.measurement.device.objects.LidarScan2D;
+import io.github.mmm.MMM;
 import io.github.mmm.measurement.device.types.lidar.LiDAR;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static io.github.mmm.MMM.DEVICE_CONTROLLER;
@@ -119,10 +119,12 @@ public class DeviceRenderer {
 
 
     public void startVisualize() {
+        Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".visualize.start"), false);
         visualizing = true;
     }
 
     public void stopVisualize() {
+        Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".visualize.stop"), false);
         visualizing = false;
     }
 
