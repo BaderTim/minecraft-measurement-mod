@@ -69,8 +69,8 @@ public class DeviceRenderer {
             // create GLOBAL end position of lidar ray
             Vec3 globalEndPosition = globalStartPosition.add(new Vec3(globalRayDirection.x, globalRayDirection.y, globalRayDirection.z).scale(lidar.getMaximumMeasurementDistanceInMeters()));
 
-            buffer.vertex(globalStartPosition.x, globalStartPosition.y, globalStartPosition.z).color(lidar.getColor().getRed(), lidar.getColor().getBlue(), lidar.getColor().getGreen(), 255).endVertex();
-            buffer.vertex(globalEndPosition.x, globalEndPosition.y, globalEndPosition.z).color(lidar.getColor().getRed(), lidar.getColor().getBlue(), lidar.getColor().getGreen(), 255).endVertex();
+            buffer.vertex(globalStartPosition.x, globalStartPosition.y, globalStartPosition.z).color(lidar.getColor().getRed(), lidar.getColor().getGreen(), lidar.getColor().getBlue(), 127).endVertex();
+            buffer.vertex(globalEndPosition.x, globalEndPosition.y, globalEndPosition.z).color(lidar.getColor().getRed(), lidar.getColor().getGreen(), lidar.getColor().getBlue(), 127).endVertex();
         }
     }
 
