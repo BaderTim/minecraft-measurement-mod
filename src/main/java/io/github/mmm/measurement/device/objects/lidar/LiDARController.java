@@ -67,7 +67,7 @@ public class LiDARController {
         LidarScan[] scans = new LidarScan[this.lidars.length];
         for (int i = 0; i < this.lidars.length; i++) {
             if(this.isLidarAllowedToScan(this.lidars[i])) {
-                scans[i] = this.lidars[i].scanFromPOVToBlocks();
+                scans[i] = this.lidars[i].performScan();
             } else {
                 scans[i] = null;
             }

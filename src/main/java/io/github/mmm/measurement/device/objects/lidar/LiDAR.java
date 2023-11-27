@@ -7,6 +7,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix3f;
+import org.joml.Vector3f;
 
 import java.awt.*;
 import java.math.BigDecimal;
@@ -135,82 +137,89 @@ public class LiDAR {
         this.color = color;
     }
 
-    public LidarScan scanFromPOVToBlocks() {
+    public LidarScan performScan() {
         if(verticalScanRadiusInDeg == 0 && verticalScansPerRadius == 0) {
-            return new LidarScan(this.get2DScanFromPOVToBlocks());
+            return new LidarScan(this.get2DScan());
         } else {
-            return new LidarScan(this.get3DScanFromPOVToBlocks());
+            return new LidarScan(this.get3DScan());
         }
     }
 
-    private LidarScan3D get3DScanFromPOVToBlocks() {
+    private LidarScan3D get3DScan() {
         float verticalScanAngleDifferenceInDeg = verticalScanRadiusInDeg / verticalScansPerRadius;
         float pitchFromPOVInDegOffset = pitchFromPOVInDeg + (verticalScanRadiusInDeg / 2); // start at the top of the scan
         LidarScan3D scan3D = new LidarScan3D(horizontalScansPerRadius, verticalScansPerRadius);
         for(int i = 0; i < verticalScansPerRadius; i++) {
             float pitchFromPOVFor3DScanInDeg2D = pitchFromPOVInDegOffset - i * verticalScanAngleDifferenceInDeg;
-            LidarScan2D scan2D = this.get2DScanFromPOVToBlocks(pitchFromPOVFor3DScanInDeg2D);
+            LidarScan2D scan2D = this.get2DScan(pitchFromPOVFor3DScanInDeg2D);
             scan3D.setScan2D(i, scan2D);
         }
         return scan3D;
     }
 
-    private LidarScan2D get2DScanFromPOVToBlocks() {
+    private LidarScan2D get2DScan() {
+        return this.get2DScan(0);
+    }
+
+    private LidarScan2D get2DScan(float extraPitchFromPOVInDeg) {
         float scanAngleDifferenceInDeg = horizontalScanRadiusInDeg / horizontalScansPerRadius;
         float yawFromPOVInDegOffset = yawFromPOVInDeg - (horizontalScanRadiusInDeg / 2); // start at the left side of the scan
+
+        // setup LOCAL coordinate system with GLOBAL pov coordinates
+        // LOCAL x1 x-axis is view vector
+        // LOCAL x3 y-axis is up vector
+        // LOCAL x2 z-axis is cross product of x-axis and y-axis
+        Vec3 localOrigin = player.getEyePosition();
+        Vec3 localXdirection = player.getViewVector(1.0F);
+        Vec3 localYdirection = player.getUpVector(1.0F);
+        Vec3 localZdirection = localXdirection.cross(localYdirection).normalize();
+
+        // Create a matrix representing the transformation from local to global coordinates
+        Matrix3f globalToLocalMatrix = new Matrix3f(
+                (float) localXdirection.x, (float) localYdirection.x, (float) localZdirection.x,
+                (float) localXdirection.y, (float) localYdirection.y, (float) localZdirection.y,
+                (float) localXdirection.z, (float) localYdirection.z, (float) localZdirection.z
+        );
+        Matrix3f localToGlobalMatrix = new Matrix3f();
+        globalToLocalMatrix.invert(localToGlobalMatrix);
+
+        // get the GLOBAL vector of the center of the player's head (0.2 thick) --> move position 'back' by 0.1
+        Vec3 globalStartPosition = localOrigin.add(localXdirection.yRot((float)Math.PI).scale(-0.1));
+
         LidarScan2D scan = new LidarScan2D(horizontalScansPerRadius);
         for(int i = 0; i < horizontalScansPerRadius; i++) {
-            float yawFromPOVInDeg1D = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;
-            scan.setDistance(i, this.getDistanceFromPOVToBlock(yawFromPOVInDeg1D));
+            // build LOCAL lidar ray direction vector
+            float finalYawFromPOVInDeg = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;
+            float finalPitchFromPOVInDeg = pitchFromPOVInDeg;
+            if(extraPitchFromPOVInDeg != 0) finalPitchFromPOVInDeg = extraPitchFromPOVInDeg;
+
+            float yawFromPOVInRad = (float)Math.toRadians(finalYawFromPOVInDeg);
+            float pitchFromPOVInRad = (float)Math.toRadians(finalPitchFromPOVInDeg);
+            float rollFromPOVInRad = (float)Math.toRadians(rollFromPOVInDeg);
+
+            Vector3f localRayDirection = new Vec3(1, 0, 0).yRot(yawFromPOVInRad).zRot(pitchFromPOVInRad).xRot(rollFromPOVInRad).toVector3f();
+
+            // transform LOCAL lidar ray direction vector to GLOBAL lidar ray direction vector
+            Vector3f globalRayDirection = localToGlobalMatrix.transform(localRayDirection);
+
+            // create GLOBAL end position of lidar ray
+            Vec3 globalEndPosition = globalStartPosition.add(new Vec3(globalRayDirection.x, globalRayDirection.y, globalRayDirection.z).scale(maximumMeasurementDistanceInMeters));
+
+            scan.setDistance(i, this.getDistanceFromStartToBlock(globalStartPosition, globalEndPosition));
         }
         return scan;
     }
 
-    // overloaded method for 3D scan
-    private LidarScan2D get2DScanFromPOVToBlocks(float pitchFromPOVFor3DScanInDeg2D) {
-        float scanAngleDifferenceInDeg = horizontalScanRadiusInDeg / horizontalScansPerRadius;
-        float yawFromPOVInDegOffset = yawFromPOVInDeg - (horizontalScanRadiusInDeg / 2); // start at the left side of the scan
-        LidarScan2D scan = new LidarScan2D(horizontalScansPerRadius);
-        for(int i = 0; i < horizontalScansPerRadius; i++) {
-            float yawFromPOVFor2DScanInDeg = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;
-            scan.setDistance(i, this.getDistanceFromPOVToBlock(yawFromPOVFor2DScanInDeg, pitchFromPOVFor3DScanInDeg2D));
-        }
-        return scan;
-    }
-
-    // overloaded method for 2D scan
-    private double getDistanceFromPOVToBlock(float yawFromPOVFor2DScanInDeg) {
-        float yawFromPOVInRad = (float)Math.toRadians(yawFromPOVFor2DScanInDeg);
-        float pitchFromPOVInRad = (float)Math.toRadians(pitchFromPOVInDeg);
-        float rollFromPOVInRad = (float)Math.toRadians(rollFromPOVInDeg);
-        return this.getDistanceFromPOVToBlock(yawFromPOVInRad, pitchFromPOVInRad, rollFromPOVInRad);
-    }
-
-    // overloaded method for 3D scan
-    private double getDistanceFromPOVToBlock(float yawFromPOVFor2DScanInDeg, float pitchFromPOVFor3DScanInDeg2D) {
-        float yawFromPOVInRad = (float)Math.toRadians(yawFromPOVFor2DScanInDeg);
-        float pitchFromPOVInRad = (float)Math.toRadians(pitchFromPOVFor3DScanInDeg2D);
-        float rollFromPOVInRad = (float)Math.toRadians(rollFromPOVInDeg);
-        return this.getDistanceFromPOVToBlock(yawFromPOVInRad, pitchFromPOVInRad, rollFromPOVInRad);
-    }
-
-    private double getDistanceFromPOVToBlock(float yawFromPOVInRad, float pitchFromPOVInRad, float rollFromPOVInRad) {
-        Vec3 eyePosition = player.getEyePosition();
-        Vec3 directionFromEyeView = player.getViewVector(1.0F);
-        // get the center of the player's head (0.2 thick) --> move position 'back' by 0.1
-        Vec3 startPosition = eyePosition.add(directionFromEyeView.yRot((float)Math.PI).scale(0.1));
-        // get the target direction by adding the given rotations to the direction from the eye view
-        Vec3 targetDirection = directionFromEyeView.yRot(yawFromPOVInRad).xRot(pitchFromPOVInRad).zRot(rollFromPOVInRad);
-        Vec3 endPosition = startPosition.add(targetDirection.scale(maximumMeasurementDistanceInMeters));
+    private double getDistanceFromStartToBlock(Vec3 startPos, Vec3 endPos) {
         ClipContext context = new ClipContext(
-                startPosition,
-                endPosition,
+                startPos,
+                endPos,
                 ClipContext.Block.OUTLINE, // check block outlines
                 ClipContext.Fluid.NONE, // ignore fluids
                 player
         );
         Vec3 targetPosition = level.clip(context).getLocation();
-        BigDecimal bd = new BigDecimal(startPosition.distanceTo(targetPosition));
+        BigDecimal bd = new BigDecimal(startPos.distanceTo(targetPosition));
         return bd.setScale(3, RoundingMode.HALF_UP).doubleValue();
     }
 

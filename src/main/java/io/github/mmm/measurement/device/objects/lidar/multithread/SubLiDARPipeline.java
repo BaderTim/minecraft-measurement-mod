@@ -17,7 +17,7 @@ public class SubLiDARPipeline implements Runnable {
     public void run() {
         for (int i = 0; i < this.subLidars.length; i++) {
             if (this.subLidars[i] != null) {
-                this.scans[i] = this.subLidars[i].scanFromPOVToBlocks();
+                this.scans[i] = this.subLidars[i].performScan();
             } else {
                 this.scans[i] = null;
             }
