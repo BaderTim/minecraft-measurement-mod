@@ -206,6 +206,7 @@ public class DeviceController {
     }
 
     public void saveIMUScansToFile(ArrayList<ImuScan> scans, String fileName) {
+        if (scans.size() == 0) return;
         String imuString = "";
         for(int i = 0; i < scans.size(); i++) {
             imuString += this.getImuScanAsSaveString(scans.get(i));
