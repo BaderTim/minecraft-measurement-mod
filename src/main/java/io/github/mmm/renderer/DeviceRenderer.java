@@ -3,6 +3,8 @@ package io.github.mmm.renderer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import io.github.mmm.MMM;
+import io.github.mmm.measurement.device.objects.LidarScan2D;
+import io.github.mmm.measurement.device.objects.LidarScan3D;
 import io.github.mmm.measurement.device.types.lidar.LiDAR;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -43,8 +45,11 @@ public class DeviceRenderer {
     }
 
     private void render2DLidar(LiDAR lidar) {
-        int horizontalScansPerRadius = lidar.getHorizontalScansPerRadius(); //10;
-        float scanAngleDifferenceInDeg = lidar.getHorizontalScanRadiusInDeg() / horizontalScansPerRadius;
+        this.render2DLidar(lidar, 0);
+    }
+
+    private void render2DLidar(LiDAR lidar, float pitchFromPOVInDeg) {
+        float scanAngleDifferenceInDeg = lidar.getHorizontalScanRadiusInDeg() / lidar.getHorizontalScansPerRadius();
         float yawFromPOVInDegOffset = lidar.getYawFromPOVInDeg() - (lidar.getHorizontalScanRadiusInDeg() / 2); // start at the left side of the scan#
 
         // setup LOCAL coordinate system with GLOBAL pov coordinates
@@ -68,18 +73,18 @@ public class DeviceRenderer {
         // get the GLOBAL vector of the center of the player's head (0.2 thick) --> move position 'back' by 0.1
         Vec3 globalStartPosition = localOrigin.add(localXdirection.yRot((float)Math.PI).scale(-0.1));
 
-        for(int i = 0; i < horizontalScansPerRadius; i++) {
+        for(int i = 0; i < lidar.getHorizontalScansPerRadius(); i++) {
 
             // build LOCAL lidar ray direction vector
             float yawFromPOVInDeg = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;
-            float pitchFromPOVInDeg = lidar.getPitchFromPOVInDeg();
+            if(pitchFromPOVInDeg == 0) pitchFromPOVInDeg = lidar.getPitchFromPOVInDeg();
             float rollFromPOVInDeg = lidar.getRollFromPOVInDeg();
 
             float yawFromPOVInRad = (float)Math.toRadians(yawFromPOVInDeg);
             float pitchFromPOVInRad = (float)Math.toRadians(pitchFromPOVInDeg);
             float rollFromPOVInRad = (float)Math.toRadians(rollFromPOVInDeg);
 
-            Vector3f localRayDirection = new Vec3(1, 0, 0).yRot(yawFromPOVInRad).xRot(pitchFromPOVInRad).zRot(rollFromPOVInRad).toVector3f();
+            Vector3f localRayDirection = new Vec3(1, 0, 0).yRot(yawFromPOVInRad).zRot(pitchFromPOVInRad).xRot(rollFromPOVInRad).toVector3f();
 
             // transform LOCAL lidar ray direction vector to GLOBAL lidar ray direction vector
             Vector3f globalRayDirection = localToGlobalMatrix.transform(localRayDirection);
@@ -93,7 +98,13 @@ public class DeviceRenderer {
     }
 
     private void render3DLidar(LiDAR lidar) {
+        float verticalScanAngleDifferenceInDeg = lidar.getVerticalScanRadiusInDeg() / lidar.getVerticalScansPerRadius();
+        float pitchFromPOVInDegOffset = lidar.getPitchFromPOVInDeg() + (lidar.getVerticalScanRadiusInDeg() / 2); // start at the top of the scan
 
+        for(int i = 0; i < lidar.getVerticalScansPerRadius(); i++) {
+            float pitchFromPOVFor3DScanInDeg2D = pitchFromPOVInDegOffset - i * verticalScanAngleDifferenceInDeg;
+            this.render2DLidar(lidar, pitchFromPOVFor3DScanInDeg2D);
+        }
     }
 
     private void beginRender() {
