@@ -1,8 +1,6 @@
 package io.github.mmm.renderer;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import io.github.mmm.measurement.survey.objects.Survey;
 import io.github.mmm.measurement.survey.objects.graph.Edge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -15,7 +13,7 @@ import java.awt.*;
 
 import static io.github.mmm.MMM.SURVEY_CONTROLLER;
 
-public class GraphRenderer {
+public class SurveyRenderer {
 
     private Tesselator tesselator;
     private BufferBuilder buffer;
@@ -23,7 +21,7 @@ public class GraphRenderer {
 
     private Color edgeColor;
 
-    public GraphRenderer() {
+    public SurveyRenderer() {
         this.edgeColor = Color.WHITE;
     }
 

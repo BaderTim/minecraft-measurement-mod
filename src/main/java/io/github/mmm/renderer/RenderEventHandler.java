@@ -12,7 +12,7 @@ import static io.github.mmm.MMM.SURVEY_CONTROLLER;
 public class RenderEventHandler {
 
     public static final DeviceRenderer DEVICE_RENDERER = new DeviceRenderer();
-    public static final GraphRenderer GRAPH_RENDERER = new GraphRenderer();
+    public static final SurveyRenderer SURVEY_RENDERER = new SurveyRenderer();
 
     @SubscribeEvent
     public static void onRenderLayerPost(RenderLevelStageEvent event) {
@@ -20,7 +20,7 @@ public class RenderEventHandler {
             DEVICE_RENDERER.render(event);
         }
         if(SURVEY_CONTROLLER.isCurrentlySurveying()) {
-            GRAPH_RENDERER.renderGraph(event);
+            SURVEY_RENDERER.renderGraph(event);
         }
     }
 
