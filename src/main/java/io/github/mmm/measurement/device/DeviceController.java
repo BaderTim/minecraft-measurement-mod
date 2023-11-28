@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import static io.github.mmm.MMM.DEVICE_CONTROLLER;
 import static io.github.mmm.MMM.MMM_ROOT_PATH;
+import static io.github.mmm.Utils.saveStringToFile;
 
 public class DeviceController {
 
@@ -68,10 +69,10 @@ public class DeviceController {
             System.out.println("Error creating directory: " + e.getMessage());
         }
 
-        if(Config.LIDAR1_SWITCH.get()) this.saveStringToFile("timestamp;data\n", "lidar1.csv");
-        if(Config.LIDAR2_SWITCH.get()) this.saveStringToFile("timestamp;data\n", "lidar2.csv");
-        if(Config.LIDAR3_SWITCH.get()) this.saveStringToFile("timestamp;data\n", "lidar3.csv");
-        if(Config.IMU1_SWITCH.get()) this.saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ\n", "imu1.csv");
+        if(Config.LIDAR1_SWITCH.get()) saveStringToFile("timestamp;data\n", this.savePath, "lidar1.csv");
+        if(Config.LIDAR2_SWITCH.get()) saveStringToFile("timestamp;data\n", this.savePath, "lidar2.csv");
+        if(Config.LIDAR3_SWITCH.get()) saveStringToFile("timestamp;data\n", this.savePath, "lidar3.csv");
+        if(Config.IMU1_SWITCH.get()) saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ\n", this.savePath, "imu1.csv");
 
         Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
         this.currentlyMeasuring = true;
@@ -94,8 +95,7 @@ public class DeviceController {
         this.imuController = null;
     }
 
-    public void initDevices() {
-        this.initLidars();
+    public void initDevices() {        this.initLidars();
         this.initImus();
     }
 
@@ -183,12 +183,12 @@ public class DeviceController {
             scansAsString += this.getLidarScanAsSaveString(scans.get(i));
         }
         if (nullCounter == scans.size()) return;
-        this.saveStringToFile(scansAsString, fileName);
+        saveStringToFile(scansAsString, this.savePath, fileName);
     }
 
     public void saveLiDARScanToFile(LidarScan scan, String fileName) {
         String result = this.getLidarScanAsSaveString(scan);
-        this.saveStringToFile(result, fileName);
+        saveStringToFile(result, this.savePath, fileName);
     }
 
     private String getLidarScanAsSaveString(LidarScan scan) {
@@ -211,28 +211,11 @@ public class DeviceController {
         for(int i = 0; i < scans.size(); i++) {
             imuString += this.getImuScanAsSaveString(scans.get(i));
         }
-        this.saveStringToFile(imuString, fileName);
+        saveStringToFile(imuString, this.savePath, fileName);
     }
 
     private String getImuScanAsSaveString(ImuScan scan) {
         return scan.getTimestamp() + ";" + scan.getAccX() + ";" + scan.getAccY() + ";" + scan.getAccZ() + ";" + scan.getGyroX() + ";" + scan.getGyroY() + ";" + scan.getGyroZ() + "\n";
-    }
-
-
-    private void saveStringToFile(String newData, String fileName) {
-        final String savePath = MMM_ROOT_PATH + this.savePath + "/" + fileName;
-        try {
-            // Open the file in "rw" mode (read and write)
-            RandomAccessFile file = new RandomAccessFile(savePath, "rw");
-            // Move the file pointer to the end of the file
-            file.seek(file.length());
-            // Write the data to the end of the file
-            file.writeBytes(newData);
-            // Close the file
-            file.close();
-        } catch (Exception e) {
-            System.out.println("Error writing file: " + e.getMessage());
-        }
     }
 
     public int getFrequencyInTicks(int frequency) {
