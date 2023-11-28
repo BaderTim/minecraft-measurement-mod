@@ -102,4 +102,8 @@ public class SurveyController {
     public Boolean isCurrentlySurveying() {
         return this.currentlySurveying;
     }
+
+    public Survey getSurvey() {
+        return this.survey;
+    }
 }
