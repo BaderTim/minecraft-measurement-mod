@@ -5,6 +5,9 @@
   "chat.mmm.measure.stop": "§c[MMM] Stopped measuring.",
   "chat.mmm.visualize.start": "§7[MMM] Started visualizing devices.",
   "chat.mmm.visualize.stop": "§7[MMM] Stopped visualizing devices.",
+  "chat.mmm.survey.start": "§a[MMM] Started survey mode.",
+  "chat.mmm.survey.stop": "§c[MMM] Stopped survey mode.",
+  "chat.mmm.survey.measure": "§7[MMM] Measured survey point.",
 
   "chat.mmm.gui.save.success": "§7[MMM] Saved config.",
   "chat.mmm.gui.save.warn": "§7[MMM] A config entry was invalid and has been changed back.",

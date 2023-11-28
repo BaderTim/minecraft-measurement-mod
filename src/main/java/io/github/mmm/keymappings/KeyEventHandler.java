@@ -52,9 +52,16 @@ public class KeyEventHandler {
 
             } else if (SURVEY_MODE_MAPPING.get().consumeClick()) {
                 LOGGER.info("SURVEY_MODE_MAPPING is pressed");
-
+                if (SURVEY_CONTROLLER.isCurrentlySurveying()) {
+                    SURVEY_CONTROLLER.stopSurvey();
+                } else {
+                    SURVEY_CONTROLLER.startSurvey();
+                }
             } else if (SURVEY_MEASURE_MAPPING.get().consumeClick()) {
                 LOGGER.info("SURVEY_MEASURE_MAPPING is pressed");
+                if (SURVEY_CONTROLLER.isCurrentlySurveying()) {
+                    SURVEY_CONTROLLER.measure();
+                }
             }
         }
     }
