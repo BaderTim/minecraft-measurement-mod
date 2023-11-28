@@ -92,11 +92,12 @@ public class SurveyController {
         for (Vertex vertex : this.survey.getVertices()) {
             verticesString += vertex.getIndex() + ";" + vertex.getPosition().x + ";" + vertex.getPosition().y + ";" + vertex.getPosition().z + "\n";
         }
+        String edgesString = "";
         for (Edge edge : this.survey.getEdges()) {
-            verticesString += edge.getIndex() + ";" + edge.getStartVertex().getIndex() + ";" + edge.getEndVertex().getIndex() + "\n";
+            edgesString += edge.getIndex() + ";" + edge.getStartVertex().getIndex() + ";" + edge.getEndVertex().getIndex() + "\n";
         }
         saveStringToFile(verticesString, this.savePath, "vertices.csv");
-        saveStringToFile(verticesString, this.savePath, "edges.csv");
+        saveStringToFile(edgesString, this.savePath, "edges.csv");
     }
 
     public Boolean isCurrentlySurveying() {
