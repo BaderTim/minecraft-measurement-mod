@@ -27,7 +27,7 @@ public class SurveyRenderer {
     private Color edgeColor;
 
     public SurveyRenderer() {
-        this.edgeColor = Color.WHITE;
+        this.edgeColor = Color.RED;
     }
 
     public void renderGraph(RenderLevelStageEvent event) {
