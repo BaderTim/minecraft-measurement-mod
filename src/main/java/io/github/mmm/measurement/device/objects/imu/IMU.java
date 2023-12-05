@@ -1,6 +1,8 @@
 package io.github.mmm.measurement.device.objects.imu;
 
 import io.github.mmm.measurement.device.scans.ImuScan;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Player;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -13,11 +15,14 @@ public class IMU {
     private boolean considerGravity;
     private int frequency;
 
+    private Player player;
+
     private Quaternionf yawPitchRoll;
 
-    public IMU(boolean considerGravity, float yawFromPOVInDeg, float pitchFromPOVInDeg, float rollFromPOVInDeg, int frequency) {
+    public IMU(boolean considerGravity, float yawFromPOVInDeg, float pitchFromPOVInDeg, float rollFromPOVInDeg, int frequency, Player player) {
         this.considerGravity = considerGravity;
         this.frequency = frequency;
+        this.player = player;
         this.yawPitchRoll = quaternionFromEulerDegrees(new Vector3f(yawFromPOVInDeg, pitchFromPOVInDeg, rollFromPOVInDeg));
 
     }
@@ -36,7 +41,14 @@ public class IMU {
 
         Vector3f linearAcceleration = calculateLinearAcceleration(linearVelocity, angularVelocity,
                 rotationMatrixCurrent, rotationMatrixPrevious);
+
         return new ImuScan(
+                player.position().x,
+                player.position().y,
+                player.position().z,
+                player.getViewVector(1.0F).x,
+                player.getViewVector(1.0F).y,
+                player.getViewVector(1.0F).z,
                 linearAcceleration.x,
                 linearAcceleration.y,
                 linearAcceleration.z,

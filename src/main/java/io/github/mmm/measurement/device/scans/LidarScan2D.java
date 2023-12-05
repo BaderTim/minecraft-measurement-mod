@@ -6,7 +6,21 @@ public class LidarScan2D {
     private int scansPerRadius;
     private long timestamp;
 
-    public LidarScan2D(int scansPerRadius) {
+    private final double posX; // position
+    private final double posY;
+    private final double posZ;
+
+    private final double viewX; // view direction
+    private final double viewY;
+    private final double viewZ;
+
+    public LidarScan2D(int scansPerRadius, double posX, double posY, double posZ, double viewX, double viewY, double viewZ) {
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+        this.viewX = viewX;
+        this.viewY = viewY;
+        this.viewZ = viewZ;
         if (scansPerRadius < 1) {
             throw new IllegalArgumentException("scansPerRadius must be greater than 0");
         }
@@ -41,5 +55,29 @@ public class LidarScan2D {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
+
+    public double getPosZ() {
+        return posZ;
+    }
+
+    public double getViewX() {
+        return viewX;
+    }
+
+    public double getViewY() {
+        return viewY;
+    }
+
+    public double getViewZ() {
+        return viewZ;
     }
 }

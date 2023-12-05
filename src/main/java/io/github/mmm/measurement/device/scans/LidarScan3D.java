@@ -7,7 +7,21 @@ public class LidarScan3D {
     private long timestamp;
     private LidarScan2D[] distances;
 
-    public LidarScan3D(int scansPerHorizontalRadius, int scansPerVerticalRadius) {
+    private final double posX; // position
+    private final double posY;
+    private final double posZ;
+
+    private final double viewX; // view direction
+    private final double viewY;
+    private final double viewZ;
+
+    public LidarScan3D(int scansPerHorizontalRadius, int scansPerVerticalRadius, double posX, double posY, double posZ, double viewX, double viewY, double viewZ) {
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+        this.viewX = viewX;
+        this.viewY = viewY;
+        this.viewZ = viewZ;
         if (scansPerHorizontalRadius < 1) {
             throw new IllegalArgumentException("scansPerHorizontalRadius must be greater than 0");
         } else if (scansPerVerticalRadius < 1) {
@@ -55,5 +69,29 @@ public class LidarScan3D {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
+
+    public double getPosZ() {
+        return posZ;
+    }
+
+    public double getViewX() {
+        return viewX;
+    }
+
+    public double getViewY() {
+        return viewY;
+    }
+
+    public double getViewZ() {
+        return viewZ;
     }
 }

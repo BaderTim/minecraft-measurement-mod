@@ -150,7 +150,7 @@ public class LiDAR {
         float pitchFromPOVInDegOffset = pitchFromPOVInDeg + (verticalScanRadiusInDeg / 2); // start at the top of the scan
         Vec3 globalStartPosition = getGlobalStartPosition();
         Matrix3f localToGlobalMatrix = getLocalToGlobalMatrix();
-        LidarScan3D scan3D = new LidarScan3D(horizontalScansPerRadius, verticalScansPerRadius);
+        LidarScan3D scan3D = new LidarScan3D(horizontalScansPerRadius, verticalScansPerRadius, player.position().x, player.position().y, player.position().z, player.getViewVector(1.0F).x, player.getViewVector(1.0F).y, player.getViewVector(1.0F).z);
         for(int i = 0; i < verticalScansPerRadius; i++) {
             float pitchFromPOVFor3DScanInDeg2D = pitchFromPOVInDegOffset - i * verticalScanAngleDifferenceInDeg;
             LidarScan2D scan2D = this.get2DScan(pitchFromPOVFor3DScanInDeg2D, globalStartPosition, localToGlobalMatrix);
@@ -167,7 +167,7 @@ public class LiDAR {
         float scanAngleDifferenceInDeg = horizontalScanRadiusInDeg / horizontalScansPerRadius;
         float yawFromPOVInDegOffset = yawFromPOVInDeg - (horizontalScanRadiusInDeg / 2); // start at the left side of the scan
 
-        LidarScan2D scan = new LidarScan2D(horizontalScansPerRadius);
+        LidarScan2D scan = new LidarScan2D(horizontalScansPerRadius, player.position().x, player.position().y, player.position().z, player.getViewVector(1.0F).x, player.getViewVector(1.0F).y, player.getViewVector(1.0F).z);
         for(int i = 0; i < horizontalScansPerRadius; i++) {
             // build LOCAL lidar ray direction vector
             float finalYawFromPOVInDeg = yawFromPOVInDegOffset + i * scanAngleDifferenceInDeg;

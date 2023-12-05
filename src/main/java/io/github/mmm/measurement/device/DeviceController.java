@@ -15,7 +15,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
 import java.awt.*;
-import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -69,10 +68,10 @@ public class DeviceController {
             System.out.println("Error creating directory: " + e.getMessage());
         }
 
-        if(Config.LIDAR1_SWITCH.get()) saveStringToFile("timestamp;data\n", this.savePath, "lidar1.csv");
-        if(Config.LIDAR2_SWITCH.get()) saveStringToFile("timestamp;data\n", this.savePath, "lidar2.csv");
-        if(Config.LIDAR3_SWITCH.get()) saveStringToFile("timestamp;data\n", this.savePath, "lidar3.csv");
-        if(Config.IMU1_SWITCH.get()) saveStringToFile("timestamp;accX;accY;accZ,gyroX;gyroY;gyroZ\n", this.savePath, "imu1.csv");
+        if(Config.LIDAR1_SWITCH.get()) saveStringToFile("timestamp;posX;posY;posZ;viewX;viewY;viewZ;data\n", this.savePath, "lidar1.csv");
+        if(Config.LIDAR2_SWITCH.get()) saveStringToFile("timestamp;posX;posY;posZ;viewX;viewY;viewZ;data\n", this.savePath, "lidar2.csv");
+        if(Config.LIDAR3_SWITCH.get()) saveStringToFile("timestamp;posX;posY;posZ;viewX;viewY;viewZ;data\n", this.savePath, "lidar3.csv");
+        if(Config.IMU1_SWITCH.get()) saveStringToFile("timestamp;posX;posY;posZ;viewX;viewY;viewZ;accX;accY;accZ,gyroX;gyroY;gyroZ\n", this.savePath, "imu1.csv");
 
         Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".measure.start"), false);
         this.currentlyMeasuring = true;
@@ -159,14 +158,15 @@ public class DeviceController {
     }
 
     private void initImus() {
+        LocalPlayer player = Minecraft.getInstance().player;
         if (Config.IMU1_SWITCH.get()) {
             this.imu1 = new IMU(
                     Config.IMU1_CONSIDER_GRAVITY.get(),
                     Config.IMU1_YAW_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.IMU1_PITCH_OFFSET_FROM_POV_IN_DEG.get(),
                     Config.IMU1_ROLL_OFFSET_FROM_POV_IN_DEG.get(),
-                    Config.IMU1_MEAUREMENT_FREQUENCY_IN_HZ.get()
-            );
+                    Config.IMU1_MEAUREMENT_FREQUENCY_IN_HZ.get(),
+                    player);
         } else {
             this.imu1 = null;
         }
@@ -202,7 +202,7 @@ public class DeviceController {
             }
             distancesString = "[" + distancesString + java.util.Arrays.toString(distances[distances.length - 1].getDistances()) + "]";
         }
-        return scan.getTimestamp() + ";" + distancesString + "\n";
+        return scan.getTimestamp() + ";" + scan.getPosX() + ";" + scan.getPosY() + ";" + scan.getPosZ() + ";" + scan.getViewX() + ";" + scan.getViewY() + ";" + scan.getViewZ() + ";" + distancesString + "\n";
     }
 
     public void saveIMUScansToFile(ArrayList<ImuScan> scans, String fileName) {
@@ -215,7 +215,7 @@ public class DeviceController {
     }
 
     private String getImuScanAsSaveString(ImuScan scan) {
-        return scan.getTimestamp() + ";" + scan.getAccX() + ";" + scan.getAccY() + ";" + scan.getAccZ() + ";" + scan.getGyroX() + ";" + scan.getGyroY() + ";" + scan.getGyroZ() + "\n";
+        return scan.getTimestamp() + ";" + scan.getPosX() + ";" + scan.getPosY() + ";" + scan.getPosZ() + ";" + scan.getViewX() + ";" + scan.getViewY() + ";" + scan.getViewZ() + ";" + scan.getAccX() + ";" + scan.getAccY() + ";" + scan.getAccZ() + ";" + scan.getGyroX() + ";" + scan.getGyroY() + ";" + scan.getGyroZ() + "\n";
     }
 
     public int getFrequencyInTicks(int frequency) {

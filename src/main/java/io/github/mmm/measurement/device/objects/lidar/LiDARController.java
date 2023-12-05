@@ -201,8 +201,9 @@ public class LiDARController {
             return subScans[0];
         }
         LidarScan2D scan2D = new LidarScan2D(
-                lidar.getHorizontalScansPerRadius()
-        );
+                lidar.getHorizontalScansPerRadius(),
+                lidar.getPlayer().position().x, lidar.getPlayer().position().y, lidar.getPlayer().position().z,
+                lidar.getPlayer().getViewVector(1.0F).x, lidar.getPlayer().getViewVector(1.0F).y, lidar.getPlayer().getViewVector(1.0F).z);
         int currentScan = 0;
         for(LidarScan scan : subScans) {
             if(scan == null) break;
@@ -219,8 +220,9 @@ public class LiDARController {
         // subScans are 2D scans
         LidarScan3D scan3D = new LidarScan3D(
                 lidar.getHorizontalScansPerRadius(),
-                lidar.getVerticalScansPerRadius()
-        );
+                lidar.getVerticalScansPerRadius(),
+                lidar.getPlayer().position().x, lidar.getPlayer().position().y, lidar.getPlayer().position().z,
+                lidar.getPlayer().getViewVector(1.0F).x, lidar.getPlayer().getViewVector(1.0F).y, lidar.getPlayer().getViewVector(1.0F).z);
         for(int i = 0; i < subScans.length; i++) {
             scan3D.setScan2D(i, subScans[i].getScan2D());
         }
