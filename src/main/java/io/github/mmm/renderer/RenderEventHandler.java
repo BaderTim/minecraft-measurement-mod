@@ -16,6 +16,11 @@ public class RenderEventHandler {
 
     @SubscribeEvent
     public static void onRenderLayerPost(RenderLevelStageEvent event) {
+
+        if(!event.getStage().equals(RenderLevelStageEvent.Stage.AFTER_ENTITIES)) {
+            return;
+        }
+
         if(DEVICE_RENDERER.isVisualizing()) {
             DEVICE_RENDERER.render(event);
         }

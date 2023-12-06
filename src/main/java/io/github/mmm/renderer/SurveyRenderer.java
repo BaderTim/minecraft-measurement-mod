@@ -9,9 +9,15 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.entity.DisplayRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.awt.*;
@@ -25,44 +31,64 @@ public class SurveyRenderer {
     private VertexBuffer vertexBuffer;
 
     private Color edgeColor;
+    private Color vertexColor;
 
     public SurveyRenderer() {
         this.edgeColor = Color.RED;
+        this.vertexColor = Color.WHITE;
     }
 
     public void renderGraph(RenderLevelStageEvent event) {
+        renderVerticesNew(event);
         beginRender();
-        //renderVertices(event);
         renderEdges();
         endRender(event);
     }
 
-    private void renderVertices(RenderLevelStageEvent event) {
-        // TODO: red dot for current vertex + index as text
+    private void renderVerticesNew(RenderLevelStageEvent event) {
 
         Font fontRenderer = Minecraft.getInstance().font;
-        PoseStack matrix = event.getPoseStack();
+        PoseStack matrixStack = event.getPoseStack();
 
-        Vec3 vector3d = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-        double xView = vector3d.x();
-        double yView = vector3d.y();
-        double zView = vector3d.z();
+        Vec3 viewerPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        Quaternionf viewerRot = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
 
         for(Vertex vertex : SURVEY_CONTROLLER.getSurvey().getVertices()) {
-            Vector3f position = vertex.getPosition();
-            String index = String.valueOf(vertex.getIndex());
+            Vector3f position3f = vertex.getPosition();
+            Vec3 position = new Vec3(position3f.x(), position3f.y(), position3f.z());
+            String text = String.valueOf(vertex.getIndex());
 
-            matrix.pushPose();
-            matrix.translate(position.x() - xView, position.y() - yView, position.z() - zView);
+            double distance = viewerPos.distanceTo(position);
 
-            matrix.translate(-fontRenderer.width(index) * 0.5, 0, 0);
-
-            MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-            fontRenderer.drawInBatch(index, 0, 0, 1, false, matrix.last().pose(), buffer, Font.DisplayMode.SEE_THROUGH, 0, 15728880);
-            buffer.endBatch();
-            matrix.popPose();
+            if (distance < 64) { // Only render if within a certain distance
+                matrixStack.pushPose();
+                matrixStack.translate(
+                        position.x() - viewerPos.x(),
+                        position.y() - viewerPos.y(),
+                        position.z() - viewerPos.z()
+                );
+                matrixStack.mulPose(viewerRot);
+                matrixStack.scale(-0.025F, -0.025F, 0.025F);
+                MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+                matrixStack.translate(-fontRenderer.width(text) / 2.0F, 0.0F, 0.0F);
+                fontRenderer.drawInBatch(
+                        text,
+                        0,
+                        0,
+                        vertexColor.getRGB(),
+                        true,
+                        matrixStack.last().pose(),
+                        buffer,
+                        Font.DisplayMode.SEE_THROUGH,
+                        0,
+                        Mth.ceil(distance)
+                );
+                buffer.endBatch();
+                matrixStack.popPose();
+            }
         }
     }
+
 
     private void renderEdges() {
         for(Edge edge : SURVEY_CONTROLLER.getSurvey().getEdges()) {
@@ -93,23 +119,6 @@ public class SurveyRenderer {
         matrix.popPose();
         VertexBuffer.unbind();
         RenderSystem.disableDepthTest();
-    }
-
-    private float getScale(
-            final double maxLen)
-    {
-        final double maxFontSize = 0.04;
-        final double minFontSize = 0.004;
-
-        final double delta = Math.min(1.0, maxLen / 4.0);
-        double scale = maxFontSize * delta + minFontSize * (1.0 - delta);
-
-        if (maxLen < 0.25)
-        {
-            scale = minFontSize;
-        }
-
-        return (float) Math.min(maxFontSize, scale);
     }
 
 }
