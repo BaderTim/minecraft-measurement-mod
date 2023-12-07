@@ -47,5 +47,10 @@
 
   "gui.mmm.settings.survey.title": "MMM Survey Settings",
   "gui.mmm.settings.survey.name": "Switch to Survey Settings",
-  "gui.mmm.settings.survey.tooltip": "Switch to the survey settings menu."
+  "gui.mmm.settings.survey.tooltip": "Switch to the survey settings menu.",
+
+  "gui.mmm.settings.survey.back.name": "Previous",
+  "gui.mmm.settings.survey.forward.name": "Next",
+  "gui.mmm.settings.survey.number.name": "Select",
+  "gui.mmm.settings.survey.sethead.name": "Set as new Head"
 }

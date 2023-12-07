@@ -56,7 +56,7 @@ public class SurveyRenderer {
         for(Vertex vertex : SURVEY_CONTROLLER.getSurvey().getVertices()) {
             Vector3f position3f = vertex.getPosition();
             Vec3 position = new Vec3(position3f.x(), position3f.y(), position3f.z());
-            String text = String.valueOf(vertex.getIndex());
+            String text = String.valueOf(vertex.getIndex()+1);
 
             double distance = viewerPos.distanceTo(position);
 
