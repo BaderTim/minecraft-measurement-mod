@@ -43,8 +43,8 @@ public class SurveyController {
             System.out.println("Error creating directory: " + e.getMessage());
         }
 
-        saveStringToFile("index;xPosition;yPosition;zPosition", this.savePath, "vertices.csv");
-        saveStringToFile("index;startVertexIndex;endVertexIndex", this.savePath, "edges.csv");
+        saveStringToFile("index;xPosition;yPosition;zPosition\n", this.savePath, "vertices.csv");
+        saveStringToFile("index;startVertexIndex;endVertexIndex\n", this.savePath, "edges.csv");
 
         Minecraft.getInstance().player.displayClientMessage(Component.translatable("chat." + MMM.MODID + ".survey.start"), false);
 
