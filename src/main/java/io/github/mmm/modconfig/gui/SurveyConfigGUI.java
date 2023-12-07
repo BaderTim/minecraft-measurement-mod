@@ -179,7 +179,7 @@ public class SurveyConfigGUI extends Screen {
             String posX = Math.round(survey.getVertex(vertexIndex).getPosition().x*100)/100.0 + "";
             String posY = Math.round(survey.getVertex(vertexIndex).getPosition().y*100)/100.0 + "";
             String posZ = Math.round(survey.getVertex(vertexIndex).getPosition().z*100)/100.0 + "";
-            String position = "X:  " + posX + " Y:  " + posY + " Z:  " + posZ;
+            String position = "X: " + posX + "  Y: " + posY + "  Z: " + posZ;
             graphics.drawCenteredString(this.font, index, 90, 77, GRAY);
             graphics.drawString(this.font, position, 10, 100, WHITE);
             if (vertexIndex == survey.getPositionVertexIndex()) {
