@@ -28,12 +28,12 @@ public class LidarScan {
     public LidarScan(LidarScan3D scan3D) {
         this.scan3D = scan3D;
         this.is2D = false;
-        this.posX = scan2D.getPosX();
-        this.posY = scan2D.getPosY();
-        this.posZ = scan2D.getPosZ();
-        this.viewX = scan2D.getViewX();
-        this.viewY = scan2D.getViewY();
-        this.viewZ = scan2D.getViewZ();
+        this.posX = scan3D.getPosX();
+        this.posY = scan3D.getPosY();
+        this.posZ = scan3D.getPosZ();
+        this.viewX = scan3D.getViewX();
+        this.viewY = scan3D.getViewY();
+        this.viewZ = scan3D.getViewZ();
     }
 
     @Override
